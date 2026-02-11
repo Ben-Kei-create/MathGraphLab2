@@ -36,9 +36,49 @@ struct ExportableGraphView: View {
             MarkedPointsOverlayView()
             DistanceLinesOverlayView()
             EquationOverlayView()
+
+            // ウォーターマーク（無料版のみ表示）
+            if !appState.isProEnabled {
+                watermark
+            }
         }
         .frame(width: size.width, height: size.height)
         .environmentObject(appState)
+    }
+
+    private var watermark: some View {
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                Text("Created with MathGraph Lab")
+                    .font(.system(size: 10, weight: .medium, design: .rounded))
+                    .foregroundColor(watermarkColor)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(
+                        Capsule()
+                            .fill(watermarkBackground)
+                    )
+                    .padding(.trailing, 12)
+                    .padding(.bottom, 12)
+            }
+        }
+    }
+
+    private var watermarkColor: Color {
+        switch appState.appTheme {
+        case .light: return Color.black.opacity(0.35)
+        case .dark, .blackboard: return Color.white.opacity(0.4)
+        }
+    }
+
+    private var watermarkBackground: Color {
+        switch appState.appTheme {
+        case .light: return Color.white.opacity(0.6)
+        case .dark: return Color.black.opacity(0.4)
+        case .blackboard: return Color.black.opacity(0.3)
+        }
     }
 }
 
@@ -103,6 +143,99 @@ struct GraphExporter {
         }
 
         return success ? url : nil
+    }
+
+    // MARK: - ファイル名生成
+
+    /// 関数式からファイル名を安全に生成
+    /// 例: "MathGraphLab_y=2x²_y=x+1_20260211"
+    static func exportFileName(appState: AppState, ext: String) -> String {
+        var parts: [String] = []
+
+        if appState.showParabolaGraph {
+            parts.append(equationSlug(for: appState.parabola))
+        }
+        if appState.showLinearGraph {
+            parts.append(lineSlug(for: appState.line))
+        }
+
+        let equations = parts.isEmpty ? "" : "_\(parts.joined(separator: "_"))"
+        let sanitized = equations
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: "/", with: "⁄")  // fraction slash (safe for filename)
+
+        return "MathGraphLab\(sanitized)_\(dateStamp()).\(ext)"
+    }
+
+    /// PNG を一時ファイルとして保存し URL を返す（ファイル名に式を含む）
+    static func renderImageToFile(appState: AppState, size: CGSize, scale: CGFloat = 2.0) -> URL? {
+        guard let image = renderImage(appState: appState, size: size, scale: scale),
+              let data = image.pngData()
+        else { return nil }
+
+        let fileName = exportFileName(appState: appState, ext: "png")
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+
+        do {
+            try data.write(to: url)
+            return url
+        } catch {
+            return nil
+        }
+    }
+
+    /// PDF ファイル名にも式を反映
+    static func renderPDFToFileNamed(appState: AppState, size: CGSize) -> URL? {
+        let view = ExportableGraphView(appState: appState, size: size)
+        let renderer = ImageRenderer(content: view)
+        renderer.proposedSize = .init(width: size.width, height: size.height)
+
+        let fileName = exportFileName(appState: appState, ext: "pdf")
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+
+        var success = false
+        renderer.render { estimatedSize, renderInContext in
+            var mediaBox = CGRect(origin: .zero, size: estimatedSize)
+
+            guard let pdfContext = CGContext(url as CFURL, mediaBox: &mediaBox, nil)
+            else { return }
+
+            pdfContext.beginPDFPage(nil)
+            renderInContext(pdfContext)
+            pdfContext.endPDFPage()
+            pdfContext.closePDF()
+            success = true
+        }
+
+        return success ? url : nil
+    }
+
+    // MARK: - Private Helpers
+
+    private static func equationSlug(for p: Parabola) -> String {
+        let a = p.a
+        let aStr = a == 1 ? "" : (a == -1 ? "-" : formatCoeff(a))
+        return "y=\(aStr)x²"
+    }
+
+    private static func lineSlug(for l: Line) -> String {
+        let m = l.m, n = l.n
+        let mStr = m == 1 ? "" : (m == -1 ? "-" : formatCoeff(m))
+        let nStr: String
+        if n == 0 {
+            nStr = ""
+        } else if n > 0 {
+            nStr = "+\(formatCoeff(n))"
+        } else {
+            nStr = formatCoeff(n)
+        }
+        if m == 0 { return "y=\(formatCoeff(n))" }
+        return "y=\(mStr)x\(nStr)"
+    }
+
+    private static func formatCoeff(_ v: Double) -> String {
+        if abs(v - round(v)) < 0.001 { return String(format: "%.0f", v) }
+        return String(format: "%.1f", v)
     }
 
     private static func dateStamp() -> String {
@@ -231,15 +364,15 @@ struct ExportSheetView: View {
     }
 
     private func exportAsPNG() {
-        guard let image = GraphExporter.renderImage(appState: appState, size: exportSize) else {
+        guard let url = GraphExporter.renderImageToFile(appState: appState, size: exportSize) else {
             isExporting = false
             return
         }
-        presentShareSheet(items: [image])
+        presentShareSheet(items: [url])
     }
 
     private func exportAsPDF() {
-        guard let pdfURL = GraphExporter.renderPDFToFile(appState: appState, size: exportSize) else {
+        guard let pdfURL = GraphExporter.renderPDFToFileNamed(appState: appState, size: exportSize) else {
             isExporting = false
             return
         }
