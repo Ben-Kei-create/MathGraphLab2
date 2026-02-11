@@ -48,9 +48,24 @@ struct GraphLabView: View {
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
                 }
                 
-                // シェアボタン
+                // シェアボタン & 原点リセット
                 ToolbarItem(placement: .navigationBarLeading) {
-                    ShareButton()
+                    HStack(spacing: 12) {
+                        ShareButton()
+
+                        // 原点リセットボタン（ズーム・パンを初期化）
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                appState.resetZoomAndPan()
+                            }
+                            if appState.isHapticsEnabled {
+                                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                            }
+                        }) {
+                            Image(systemName: "scope")
+                                .font(.system(size: 18))
+                        }
+                    }
                 }
                 
                 // 設定メニュー

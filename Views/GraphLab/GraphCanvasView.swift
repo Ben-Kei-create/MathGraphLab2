@@ -47,72 +47,98 @@ struct GraphCanvasView: View {
     
     private func drawAxes(context: GraphicsContext, system: CoordinateSystem, size: CGSize) {
         let center = system.screenPosition(mathX: 0, mathY: 0)
-        
+
         // 背景テーマに合わせた色（黒板なら白、ライトなら黒）
         let axisColor: Color = (appState.appTheme == .light) ? .black : .white
-        
+
         // 軸線の描画
         let xAxisPath = Path { p in
             p.move(to: CGPoint(x: 0, y: center.y))
             p.addLine(to: CGPoint(x: size.width, y: center.y))
         }
         context.stroke(xAxisPath, with: .color(axisColor), lineWidth: 2)
-        
+
         let yAxisPath = Path { p in
             p.move(to: CGPoint(x: center.x, y: 0))
             p.addLine(to: CGPoint(x: center.x, y: size.height))
         }
         context.stroke(yAxisPath, with: .color(axisColor), lineWidth: 2)
-        
+
+        // ズーム倍率に応じた目盛り間隔を計算
+        let tickStep = optimalTickStep(for: system)
+
         // 現在の表示範囲
         let topLeft = system.mathPosition(from: CGPoint(x: 0, y: 0))
         let bottomRight = system.mathPosition(from: CGPoint(x: size.width, y: size.height))
-        
-        let startX = Int(floor(topLeft.x))
-        let endX = Int(ceil(bottomRight.x))
-        let startY = Int(floor(bottomRight.y))
-        let endY = Int(ceil(topLeft.y))
-        
-        // --- X軸: 目盛りと数字を一箇所で描画 ---
-        for i in startX...endX {
-            if i == 0 { continue }
-            let pos = system.screenPosition(mathX: Double(i), mathY: 0)
-            
+
+        // --- X軸: 目盛りと数字 ---
+        var x = ceil(topLeft.x / tickStep) * tickStep
+        while x <= bottomRight.x {
+            if abs(x) < tickStep * 0.1 { x += tickStep; continue }
+            let pos = system.screenPosition(mathX: x, mathY: 0)
+
             let tickPath = Path { p in
                 p.move(to: CGPoint(x: pos.x, y: center.y - 5))
                 p.addLine(to: CGPoint(x: pos.x, y: center.y + 5))
             }
             context.stroke(tickPath, with: .color(axisColor), lineWidth: 1)
-            
-            let text = Text("\(i)").font(.system(size: 10)).foregroundColor(axisColor)
+
+            let label = formatTickLabel(x, step: tickStep)
+            let text = Text(label).font(.system(size: 10)).foregroundColor(axisColor)
             context.draw(text, at: CGPoint(x: pos.x, y: center.y + 15))
+            x += tickStep
         }
-        
-        // --- Y軸: 目盛りと数字を一箇所（軸の左側）で描画 ---
-        for i in startY...endY {
-            if i == 0 { continue }
-            let pos = system.screenPosition(mathX: 0, mathY: Double(i))
-            
+
+        // --- Y軸: 目盛りと数字 ---
+        var y = ceil(bottomRight.y / tickStep) * tickStep
+        while y <= topLeft.y {
+            if abs(y) < tickStep * 0.1 { y += tickStep; continue }
+            let pos = system.screenPosition(mathX: 0, mathY: y)
+
             let tickPath = Path { p in
                 p.move(to: CGPoint(x: center.x - 5, y: pos.y))
                 p.addLine(to: CGPoint(x: center.x + 5, y: pos.y))
             }
             context.stroke(tickPath, with: .color(axisColor), lineWidth: 1)
-            
-            // 数字を軸のすぐ左側に配置
-            let text = Text("\(i)").font(.system(size: 10)).foregroundColor(axisColor)
+
+            let label = formatTickLabel(y, step: tickStep)
+            let text = Text(label).font(.system(size: 10)).foregroundColor(axisColor)
             context.draw(text, at: CGPoint(x: center.x - 15, y: pos.y))
+            y += tickStep
         }
-        
+
         // 原点 0
         context.draw(Text("0").font(.system(size: 10)).foregroundColor(axisColor),
                      at: CGPoint(x: center.x - 10, y: center.y + 10))
-        
+
         // ラベル
         context.draw(Text("x").font(.system(size: 14, weight: .bold)).foregroundColor(axisColor),
                      at: CGPoint(x: size.width - 15, y: center.y + 15))
         context.draw(Text("y").font(.system(size: 14, weight: .bold)).foregroundColor(axisColor),
                      at: CGPoint(x: center.x + 15, y: 15))
+    }
+
+    /// ズーム倍率に応じて最適な目盛り間隔を計算
+    /// ラベル同士が重ならないよう、画面上で40〜100px間隔になるステップを選ぶ
+    private func optimalTickStep(for system: CoordinateSystem) -> Double {
+        let pixelsPerUnit = Double(system.scale) // 1数学単位あたりのピクセル数
+        let candidates: [Double] = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50]
+        let minPixelGap = 40.0
+
+        for step in candidates {
+            if step * pixelsPerUnit >= minPixelGap {
+                return step
+            }
+        }
+        return 50
+    }
+
+    /// 目盛りの数値を適切な書式で表示
+    private func formatTickLabel(_ value: Double, step: Double) -> String {
+        if step >= 1 {
+            return String(format: "%.0f", value)
+        }
+        return String(format: "%.1f", value)
     }
     
     private func drawParabola(context: GraphicsContext, system: CoordinateSystem, parabola: Parabola, color: Color, style: StrokeStyle) {

@@ -16,7 +16,6 @@ struct GridBackgroundView: View {
     @EnvironmentObject var appState: AppState
     
     // Grid configuration
-    private let gridStep: CGFloat = 1.0  // Grid spacing in math coordinates
     private let axisLineWidth: CGFloat = 2.0
     private let gridLineWidth: CGFloat = 0.5
     
@@ -39,31 +38,50 @@ struct GridBackgroundView: View {
     
     // MARK: - Drawing Methods
     
+    /// ズーム倍率に応じた最適なグリッド間隔を計算
+    private func optimalGridStep(for size: CGSize) -> CGFloat {
+        let coordSystem = CoordinateSystem(
+            size: size,
+            zoomScale: appState.zoomScale,
+            panOffset: appState.panOffset
+        )
+        let pixelsPerUnit = coordSystem.scale
+        let candidates: [CGFloat] = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50]
+        let minPixelGap: CGFloat = 40.0
+
+        for step in candidates {
+            if step * pixelsPerUnit >= minPixelGap {
+                return step
+            }
+        }
+        return 50
+    }
+
     /// Draw vertical and horizontal grid lines
     private func drawGridLines(context: GraphicsContext, size: CGSize, color: Color) {
         var path = Path()
-        
-        // Determine visible range in math coordinates
+
+        let gridStep = optimalGridStep(for: size)
         let mathBounds = getMathBounds(for: size)
-        
+
         // Vertical grid lines (parallel to Y-axis)
-        var x = floor(mathBounds.minX)
+        var x = ceil(mathBounds.minX / gridStep) * gridStep
         while x <= mathBounds.maxX {
             let screenPoint = screenPosition(mathX: x, mathY: 0, in: size)
             path.move(to: CGPoint(x: screenPoint.x, y: 0))
             path.addLine(to: CGPoint(x: screenPoint.x, y: size.height))
             x += gridStep
         }
-        
+
         // Horizontal grid lines (parallel to X-axis)
-        var y = floor(mathBounds.minY)
+        var y = ceil(mathBounds.minY / gridStep) * gridStep
         while y <= mathBounds.maxY {
             let screenPoint = screenPosition(mathX: 0, mathY: y, in: size)
             path.move(to: CGPoint(x: 0, y: screenPoint.y))
             path.addLine(to: CGPoint(x: size.width, y: screenPoint.y))
             y += gridStep
         }
-        
+
         context.stroke(
             path,
             with: .color(color),
@@ -126,50 +144,52 @@ struct GridBackgroundView: View {
         )
     }
     
-    /// Draw axis labels (0, ±1, ±2, etc.)
+    /// Draw axis labels with adaptive density based on zoom
     private func drawAxisLabels(context: GraphicsContext, size: CGSize, color: Color) {
         let mathBounds = getMathBounds(for: size)
         let origin = screenPosition(mathX: 0, mathY: 0, in: size)
-        
+        let step = optimalGridStep(for: size)
+        let fmt = step >= 1 ? "%.0f" : "%.1f"
+
         // X-axis labels
-        var x = floor(mathBounds.minX)
+        var x = ceil(mathBounds.minX / step) * step
         while x <= mathBounds.maxX {
-            guard abs(x) > 0.1 else { x += gridStep; continue } // Skip origin
+            guard abs(x) > step * 0.1 else { x += step; continue }
             let screenPoint = screenPosition(mathX: x, mathY: 0, in: size)
-            
-            let text = Text(String(format: "%.0f", x))
+
+            let text = Text(String(format: fmt, x))
                 .font(.system(size: 10, design: .monospaced))
                 .foregroundColor(color)
-            
+
             context.draw(
                 text,
                 at: CGPoint(x: screenPoint.x, y: origin.y + 15)
             )
-            x += gridStep
+            x += step
         }
-        
+
         // Y-axis labels
-        var y = floor(mathBounds.minY)
+        var y = ceil(mathBounds.minY / step) * step
         while y <= mathBounds.maxY {
-            guard abs(y) > 0.1 else { y += gridStep; continue } // Skip origin
+            guard abs(y) > step * 0.1 else { y += step; continue }
             let screenPoint = screenPosition(mathX: 0, mathY: y, in: size)
-            
-            let text = Text(String(format: "%.0f", y))
+
+            let text = Text(String(format: fmt, y))
                 .font(.system(size: 10, design: .monospaced))
                 .foregroundColor(color)
-            
+
             context.draw(
                 text,
                 at: CGPoint(x: origin.x + 20, y: screenPoint.y)
             )
-            y += gridStep
+            y += step
         }
-        
+
         // Draw "O" at origin
         let originLabel = Text("O")
             .font(.system(size: 12, weight: .semibold, design: .monospaced))
             .foregroundColor(color)
-        
+
         context.draw(
             originLabel,
             at: CGPoint(x: origin.x + 15, y: origin.y + 15)

@@ -60,8 +60,14 @@ struct AnalysisOverlayView: View {
                 intersections: intersections
             )
             
-            // Draw intersection points (green dots)
+            // Draw intersection points (green dots) with coordinate labels
             drawIntersectionPoints(
+                context: context,
+                coordSystem: coordSystem,
+                intersections: intersections
+            )
+
+            drawIntersectionLabels(
                 context: context,
                 coordSystem: coordSystem,
                 intersections: intersections
@@ -115,6 +121,82 @@ struct AnalysisOverlayView: View {
         }
     }
     
+    /// Draw coordinate labels next to intersection points
+    private func drawIntersectionLabels(
+        context: GraphicsContext,
+        coordSystem: CoordinateSystem,
+        intersections: [IntersectionPoint]
+    ) {
+        let textColor: Color = (appState.appTheme == .light)
+            ? Color.black.opacity(0.8)
+            : Color.white.opacity(0.9)
+        let bgColor: Color = (appState.appTheme == .light)
+            ? Color.white.opacity(0.85)
+            : Color.black.opacity(0.7)
+
+        for point in intersections {
+            let screenPos = coordSystem.screenPosition(mathX: point.x, mathY: point.y)
+
+            let xStr = formatCoordinate(point.x)
+            let yStr = formatCoordinate(point.y)
+            let label = "(\(xStr), \(yStr))"
+
+            let text = Text(label)
+                .font(.system(size: 11, weight: .medium, design: .monospaced))
+                .foregroundColor(textColor)
+
+            let labelPos = CGPoint(x: screenPos.x + 14, y: screenPos.y - 16)
+
+            // Background pill
+            let pillWidth: CGFloat = CGFloat(label.count) * 7.0 + 8
+            let pillRect = CGRect(
+                x: labelPos.x - pillWidth / 2,
+                y: labelPos.y - 10,
+                width: pillWidth,
+                height: 20
+            )
+            context.fill(
+                Path(roundedRect: pillRect, cornerRadius: 6),
+                with: .color(bgColor)
+            )
+            context.stroke(
+                Path(roundedRect: pillRect, cornerRadius: 6),
+                with: .color(Color.green.opacity(0.5)),
+                lineWidth: 0.5
+            )
+
+            context.draw(text, at: labelPos)
+        }
+    }
+
+    /// Format a coordinate value for display (clean fractions when possible)
+    private func formatCoordinate(_ value: Double) -> String {
+        // Check if it's close to an integer
+        if abs(value - round(value)) < 0.001 {
+            return String(format: "%.0f", value)
+        }
+        // Check common fractions (halves, thirds, quarters)
+        let fractions: [(Double, String)] = [
+            (0.5, "½"), (0.25, "¼"), (0.75, "¾"),
+            (1.0/3.0, "⅓"), (2.0/3.0, "⅔"),
+        ]
+        let absVal = abs(value)
+        let intPart = floor(absVal)
+        let fracPart = absVal - intPart
+        let sign = value < 0 ? "-" : ""
+
+        for (frac, symbol) in fractions {
+            if abs(fracPart - frac) < 0.01 {
+                if intPart == 0 {
+                    return "\(sign)\(symbol)"
+                }
+                return "\(sign)\(Int(intPart))\(symbol)"
+            }
+        }
+        // Fallback to decimal
+        return String(format: "%.1f", value)
+    }
+
     /// Draw dashed lines from intersection points to X-axis
     private func drawDroplines(
         context: GraphicsContext,
