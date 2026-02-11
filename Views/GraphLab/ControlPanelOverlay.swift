@@ -44,22 +44,60 @@ struct ControlPanelOverlay: View {
                     .transition(.scale.combined(with: .opacity))
             }
         }
-        .onAppear { syncValuesToText() }
-        .onChange(of: appState.parabola.a) { _, _ in syncValuesToText() }
-        .onChange(of: appState.parabola.p) { _, _ in syncValuesToText() }
-        .onChange(of: appState.parabola.q) { _, _ in syncValuesToText() }
-        .onChange(of: appState.line.m) { _, _ in syncValuesToText() }
-        .onChange(of: appState.line.n) { _, _ in syncValuesToText() }
+        .onAppear { syncAllValues() }
+        .onChange(of: appState.coefficientInputMode) { _, _ in syncAllValues() }
+        .onChange(of: appState.parabola.a) { _, _ in syncAllValues() }
+        .onChange(of: appState.parabola.p) { _, _ in syncAllValues() }
+        .onChange(of: appState.parabola.q) { _, _ in syncAllValues() }
+        .onChange(of: appState.line.m) { _, _ in syncAllValues() }
+        .onChange(of: appState.line.n) { _, _ in syncAllValues() }
     }
-    
-    private func syncValuesToText() {
-        if appState.coefficientInputMode == .decimal {
-            aText = String(format: "%.2f", appState.parabola.a)
-            pText = String(format: "%.1f", appState.parabola.p)
-            qText = String(format: "%.1f", appState.parabola.q)
-            mText = String(format: "%.2f", appState.line.m)
-            nText = String(format: "%.2f", appState.line.n)
+
+    /// 小数テキスト・分数テキストの両方を現在の値で同期
+    private func syncAllValues() {
+        let a = appState.parabola.a
+        let p = appState.parabola.p
+        let q = appState.parabola.q
+        let m = appState.line.m
+        let n = appState.line.n
+
+        // 小数テキストを同期
+        aText = String(format: "%.2f", a)
+        pText = String(format: "%.1f", p)
+        qText = String(format: "%.1f", q)
+        mText = String(format: "%.2f", m)
+        nText = String(format: "%.2f", n)
+
+        // 分数テキストを同期
+        let (aFN, aFD) = toFraction(a)
+        aNum = "\(aFN)"; aDen = "\(aFD)"
+        let (pFN, pFD) = toFraction(p)
+        pNum = "\(pFN)"; pDen = "\(pFD)"
+        let (qFN, qFD) = toFraction(q)
+        qNum = "\(qFN)"; qDen = "\(qFD)"
+        let (mFN, mFD) = toFraction(m)
+        mNum = "\(mFN)"; mDen = "\(mFD)"
+        let (nFN, nFD) = toFraction(n)
+        nNum = "\(nFN)"; nDen = "\(nFD)"
+    }
+
+    /// Double を分数（分子, 分母）に近似変換
+    private func toFraction(_ value: Double) -> (Int, Int) {
+        let tolerance = 0.001
+        // 整数チェック
+        if abs(value - round(value)) < tolerance {
+            return (Int(round(value)), 1)
         }
+        // 分母 2〜20 で近似
+        for d in 2...20 {
+            let n = value * Double(d)
+            if abs(n - round(n)) < tolerance {
+                return (Int(round(n)), d)
+            }
+        }
+        // フォールバック: 小数2桁 → 100分の
+        let n100 = Int(round(value * 100))
+        return (n100, 100)
     }
     
     // MARK: - Compact Button
