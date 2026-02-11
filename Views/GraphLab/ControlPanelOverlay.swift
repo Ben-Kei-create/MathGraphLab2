@@ -104,6 +104,41 @@ struct ControlPanelOverlay: View {
         .padding(.bottom, 20)
     }
     
+    // MARK: - Theme Toggle Buttons
+    private var themeToggleButtons: some View {
+        HStack(spacing: 6) {
+            ForEach(AppState.AppTheme.allCases) { theme in
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        appState.appTheme = theme
+                    }
+                    if appState.isHapticsEnabled {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    }
+                }) {
+                    Circle()
+                        .fill(themeCircleColor(for: theme))
+                        .frame(width: 22, height: 22)
+                        .overlay(
+                            Circle()
+                                .strokeBorder(
+                                    appState.appTheme == theme ? Color.accentColor : Color.gray.opacity(0.3),
+                                    lineWidth: appState.appTheme == theme ? 2.5 : 1
+                                )
+                        )
+                }
+            }
+        }
+    }
+
+    private func themeCircleColor(for theme: AppState.AppTheme) -> Color {
+        switch theme {
+        case .light: return .white
+        case .dark: return Color(white: 0.15)
+        case .blackboard: return Color(red: 0.0, green: 0.25, blue: 0.18)
+        }
+    }
+
     // MARK: - Panel Content
     private var panelContent: some View {
         VStack(spacing: 0) {
@@ -113,7 +148,7 @@ struct ControlPanelOverlay: View {
                 } else {
                     HStack(spacing: 12) {
                         Text("パラメータ設定").font(.system(size: 14, weight: .bold)).foregroundColor(.secondary)
-                        
+
                         Picker("Input Mode", selection: $appState.coefficientInputMode) {
                             ForEach(AppState.InputMode.allCases) { mode in
                                 Text(mode.rawValue).tag(mode)
@@ -121,7 +156,10 @@ struct ControlPanelOverlay: View {
                         }
                         .pickerStyle(.segmented)
                         .frame(width: 120)
-                        
+
+                        // テーマ切替ボタン（⚫◯で瞬時に切替）
+                        themeToggleButtons
+
                         if appState.parabolaLabelOffset != .zero || appState.lineLabelOffset != .zero {
                             Button(action: {
                                 withAnimation {
