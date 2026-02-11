@@ -12,7 +12,7 @@ class SettingsViewModel: ObservableObject {
     @AppStorage("isHapticsEnabled") var isHapticsEnabled = true {
         willSet { objectWillChange.send() }
     }
-    @AppStorage("appTheme") var appTheme = "light" {
+    @AppStorage("appTheme") var appTheme: AppState.AppTheme = .light {
         willSet { objectWillChange.send() }
     }
     @AppStorage("isProEnabled") var isProEnabled = false {

@@ -26,11 +26,21 @@ final class AppState: ObservableObject {
 
     // MARK: - User Settings (プロパティラッパーは必ずクラス内で定義)
     
-    @AppStorage("appTheme") var appTheme: AppTheme = .light
-    @AppStorage("isGridSnapEnabled") var isGridSnapEnabled: Bool = true
-    @AppStorage("isHapticsEnabled") var isHapticsEnabled: Bool = true
-    @AppStorage("isProEnabled") var isProEnabled: Bool = false
-    @AppStorage("isAdRemoved") var isAdRemoved: Bool = false
+    @AppStorage("appTheme") var appTheme: AppTheme = .light {
+        willSet { objectWillChange.send() }
+    }
+    @AppStorage("isGridSnapEnabled") var isGridSnapEnabled: Bool = true {
+        willSet { objectWillChange.send() }
+    }
+    @AppStorage("isHapticsEnabled") var isHapticsEnabled: Bool = true {
+        willSet { objectWillChange.send() }
+    }
+    @AppStorage("isProEnabled") var isProEnabled: Bool = false {
+        willSet { objectWillChange.send() }
+    }
+    @AppStorage("isAdRemoved") var isAdRemoved: Bool = false {
+        willSet { objectWillChange.send() }
+    }
     
     // MARK: - Core Parameters
     
