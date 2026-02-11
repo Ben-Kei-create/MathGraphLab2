@@ -26,11 +26,21 @@ final class AppState: ObservableObject {
 
     // MARK: - User Settings (プロパティラッパーは必ずクラス内で定義)
     
-    @AppStorage("appTheme") var appTheme: AppTheme = .light
-    @AppStorage("isGridSnapEnabled") var isGridSnapEnabled: Bool = true
-    @AppStorage("isHapticsEnabled") var isHapticsEnabled: Bool = true
-    @AppStorage("isProEnabled") var isProEnabled: Bool = false
-    @AppStorage("isAdRemoved") var isAdRemoved: Bool = false
+    @Published var appTheme: AppTheme {
+        didSet { UserDefaults.standard.set(appTheme.rawValue, forKey: "appTheme") }
+    }
+    @Published var isGridSnapEnabled: Bool {
+        didSet { UserDefaults.standard.set(isGridSnapEnabled, forKey: "isGridSnapEnabled") }
+    }
+    @Published var isHapticsEnabled: Bool {
+        didSet { UserDefaults.standard.set(isHapticsEnabled, forKey: "isHapticsEnabled") }
+    }
+    @Published var isProEnabled: Bool {
+        didSet { UserDefaults.standard.set(isProEnabled, forKey: "isProEnabled") }
+    }
+    @Published var isAdRemoved: Bool {
+        didSet { UserDefaults.standard.set(isAdRemoved, forKey: "isAdRemoved") }
+    }
     
     // MARK: - Core Parameters
     
@@ -65,8 +75,17 @@ final class AppState: ObservableObject {
     // MARK: - Initialization
     
     init() {
-        // AppStorageを使っているので、initでの手動読み込みやUserDefaultsの監視は不要になりました。
-        // これでコードがさらにシンプルになります。
+        let defaults = UserDefaults.standard
+        if let themeRaw = defaults.string(forKey: "appTheme"),
+           let theme = AppTheme(rawValue: themeRaw) {
+            self.appTheme = theme
+        } else {
+            self.appTheme = .light
+        }
+        self.isGridSnapEnabled = defaults.object(forKey: "isGridSnapEnabled") as? Bool ?? true
+        self.isHapticsEnabled = defaults.object(forKey: "isHapticsEnabled") as? Bool ?? true
+        self.isProEnabled = defaults.object(forKey: "isProEnabled") as? Bool ?? false
+        self.isAdRemoved = defaults.object(forKey: "isAdRemoved") as? Bool ?? false
     }
     
     // --- 以下、計算プロパティやメソッド ---

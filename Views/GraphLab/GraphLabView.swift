@@ -42,22 +42,27 @@ struct GraphLabView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(getBackgroundColor(), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(appState.appTheme == .light ? .light : .dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("MathGraph Lab")
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
+                        .foregroundColor(appState.appTheme == .light ? .primary : .white)
                 }
-                
+
                 // シェアボタン
                 ToolbarItem(placement: .navigationBarLeading) {
                     ShareButton()
                 }
-                
+
                 // 設定メニュー
                 ToolbarItem(placement: .navigationBarTrailing) {
                     settingsMenu
                 }
             }
+            .preferredColorScheme(appState.appTheme == .light ? .light : .dark)
         }
     }
     
@@ -74,9 +79,22 @@ struct GraphLabView: View {
                     
                     // テーマ切り替え
                     Menu {
-                        Picker("テーマ", selection: $appState.appTheme) {
-                            ForEach(AppState.AppTheme.allCases) { theme in
-                                Text(theme.rawValue).tag(theme)
+                        ForEach(AppState.AppTheme.allCases) { theme in
+                            Button {
+                                if theme == .blackboard && !appState.isProEnabled {
+                                    return
+                                }
+                                appState.appTheme = theme
+                            } label: {
+                                HStack {
+                                    Text(theme.rawValue)
+                                    if appState.appTheme == theme {
+                                        Image(systemName: "checkmark")
+                                    }
+                                    if theme == .blackboard && !appState.isProEnabled {
+                                        Image(systemName: "lock.fill")
+                                    }
+                                }
                             }
                         }
                     } label: {
