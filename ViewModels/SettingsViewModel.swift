@@ -1,26 +1,10 @@
 import SwiftUI
 import Foundation
-import Combine // これを追加
+import Combine
 
+/// 設定画面用の ViewModel
+/// 注意: 現在は AppState が設定の一元管理を担っているため、
+/// このクラスは後方互換性のために残しています。
 class SettingsViewModel: ObservableObject {
-    // 変更を通知するための仕組みを追加
-    let objectWillChange = ObservableObjectPublisher()
-    
-    @AppStorage("isGridSnapEnabled") var isGridSnapEnabled = true {
-        willSet { objectWillChange.send() }
-    }
-    @AppStorage("isHapticsEnabled") var isHapticsEnabled = true {
-        willSet { objectWillChange.send() }
-    }
-    @AppStorage("appTheme") var appTheme: AppState.AppTheme = .light {
-        willSet { objectWillChange.send() }
-    }
-    @AppStorage("isProEnabled") var isProEnabled = false {
-        willSet { objectWillChange.send() }
-    }
-    @AppStorage("isAdRemoved") var isAdRemoved = false {
-        willSet { objectWillChange.send() }
-    }
-    
-    init() {}
+    // AppState を直接使用するため、このクラスのプロパティは参照用
 }

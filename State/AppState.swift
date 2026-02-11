@@ -24,22 +24,24 @@ final class AppState: ObservableObject {
         var id: String { self.rawValue }
     }
 
-    // MARK: - User Settings (プロパティラッパーは必ずクラス内で定義)
-    
-    @AppStorage("appTheme") var appTheme: AppTheme = .light {
-        willSet { objectWillChange.send() }
+    // MARK: - User Settings
+    // @AppStorage は ObservableObject 内で objectWillChange を発火しないため、
+    // @Published + UserDefaults で確実にビュー更新を通知する
+
+    @Published var appTheme: AppTheme {
+        didSet { UserDefaults.standard.set(appTheme.rawValue, forKey: "appTheme") }
     }
-    @AppStorage("isGridSnapEnabled") var isGridSnapEnabled: Bool = true {
-        willSet { objectWillChange.send() }
+    @Published var isGridSnapEnabled: Bool {
+        didSet { UserDefaults.standard.set(isGridSnapEnabled, forKey: "isGridSnapEnabled") }
     }
-    @AppStorage("isHapticsEnabled") var isHapticsEnabled: Bool = true {
-        willSet { objectWillChange.send() }
+    @Published var isHapticsEnabled: Bool {
+        didSet { UserDefaults.standard.set(isHapticsEnabled, forKey: "isHapticsEnabled") }
     }
-    @AppStorage("isProEnabled") var isProEnabled: Bool = false {
-        willSet { objectWillChange.send() }
+    @Published var isProEnabled: Bool {
+        didSet { UserDefaults.standard.set(isProEnabled, forKey: "isProEnabled") }
     }
-    @AppStorage("isAdRemoved") var isAdRemoved: Bool = false {
-        willSet { objectWillChange.send() }
+    @Published var isAdRemoved: Bool {
+        didSet { UserDefaults.standard.set(isAdRemoved, forKey: "isAdRemoved") }
     }
     
     // MARK: - Core Parameters
@@ -75,8 +77,27 @@ final class AppState: ObservableObject {
     // MARK: - Initialization
     
     init() {
-        // AppStorageを使っているので、initでの手動読み込みやUserDefaultsの監視は不要になりました。
-        // これでコードがさらにシンプルになります。
+        let defaults = UserDefaults.standard
+
+        // テーマの復元（rawValue が日本語文字列: "ライト", "ダーク", "黒板"）
+        if let themeRaw = defaults.string(forKey: "appTheme"),
+           let theme = AppTheme(rawValue: themeRaw) {
+            self.appTheme = theme
+        } else {
+            self.appTheme = .light
+        }
+
+        // Bool 設定の復元（未登録キーは false になるので、デフォルト値を登録）
+        defaults.register(defaults: [
+            "isGridSnapEnabled": true,
+            "isHapticsEnabled": true,
+            "isProEnabled": false,
+            "isAdRemoved": false
+        ])
+        self.isGridSnapEnabled = defaults.bool(forKey: "isGridSnapEnabled")
+        self.isHapticsEnabled = defaults.bool(forKey: "isHapticsEnabled")
+        self.isProEnabled = defaults.bool(forKey: "isProEnabled")
+        self.isAdRemoved = defaults.bool(forKey: "isAdRemoved")
     }
     
     // --- 以下、計算プロパティやメソッド ---
