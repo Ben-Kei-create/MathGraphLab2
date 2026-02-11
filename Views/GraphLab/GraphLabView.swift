@@ -72,55 +72,21 @@ struct GraphLabView: View {
                         Label("触覚フィードバック", systemImage: "hand.tap")
                     }
                     
-                    // テーマ切り替え
+                    // テーマ切り替え（Pickerだとメニューが閉じるバグがあるためButtonで実装）
                     Menu {
-                        Picker("テーマ", selection: $appState.appTheme) {
-                            ForEach(AppState.AppTheme.allCases) { theme in
-                                Text(theme.rawValue).tag(theme)
+                        ForEach(AppState.AppTheme.allCases) { theme in
+                            Button(action: {
+                                appState.appTheme = theme
+                            }) {
+                                if appState.appTheme == theme {
+                                    Label(theme.rawValue, systemImage: "checkmark")
+                                } else {
+                                    Text(theme.rawValue)
+                                }
                             }
                         }
                     } label: {
                         Label("テーマ: \(appState.appTheme.rawValue)", systemImage: "paintpalette")
-                    }
-                }
-
-                // --- 課金・サポート ---
-                Section {
-                    Button(action: {
-                        // TODO: 実際の課金処理（StoreKit）
-                        print("広告削除ボタン押下")
-                    }) {
-                        Label("広告を非表示にする (課金)", systemImage: "megaphone.slash")
-                    }
-                    
-                    Button(action: {
-                        // 募金ページ（例としてGoogleを指定していますが、自身のURLに変更してください）
-                        if let url = URL(string: "https://www.google.com") {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        Label("開発者を応援する (募金)", systemImage: "heart.circle")
-                    }
-                }
-
-                // --- サポート・情報 (ここが本番！) ---
-                Section {
-                    Button(action: {
-                        // お問い合わせフォームなどのURL
-                        if let url = URL(string: "https://forms.gle/your-form-url") {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        Label("お問い合わせ", systemImage: "envelope")
-                    }
-                    
-                    Button(action: {
-                        // プライバシーポリシーのURL
-                        if let url = URL(string: "https://your-site.com/privacy") {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        Label("プライバシーポリシー", systemImage: "doc.text")
                     }
                 }
 
