@@ -1,0 +1,804 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A5C079812F3BFB54005E1164 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C079652F3BFB54005E1164 /* Assets.xcassets */; };
+		A5C079832F3BFB54005E1164 /* FractionInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079562F3BFB54005E1164 /* FractionInput.swift */; };
+		A5C079842F3BFB54005E1164 /* GraphLabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079782F3BFB54005E1164 /* GraphLabView.swift */; };
+		A5C079852F3BFB54005E1164 /* AnalysisOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079752F3BFB54005E1164 /* AnalysisOverlayView.swift */; };
+		A5C079862F3BFB54005E1164 /* MathGraphLabApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0795F2F3BFB54005E1164 /* MathGraphLabApp.swift */; };
+		A5C079872F3BFB54005E1164 /* ParameterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079572F3BFB54005E1164 /* ParameterInput.swift */; };
+		A5C079882F3BFB54005E1164 /* ParameterSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079732F3BFB54005E1164 /* ParameterSlider.swift */; };
+		A5C079892F3BFB54005E1164 /* GraphCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079772F3BFB54005E1164 /* GraphCanvasView.swift */; };
+		A5C0798A2F3BFB54005E1164 /* GridBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079792F3BFB54005E1164 /* GridBackgroundView.swift */; };
+		A5C0798B2F3BFB54005E1164 /* BannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079702F3BFB54005E1164 /* BannerAdView.swift */; };
+		A5C0798C2F3BFB54005E1164 /* CoordinateSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079622F3BFB54005E1164 /* CoordinateSystem.swift */; };
+		A5C0798D2F3BFB54005E1164 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079592F3BFB54005E1164 /* ContentView.swift */; };
+		A5C0798E2F3BFB54005E1164 /* MonospacedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079722F3BFB54005E1164 /* MonospacedLabel.swift */; };
+		A5C0798F2F3BFB54005E1164 /* SharePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0797A2F3BFB54005E1164 /* SharePreviewView.swift */; };
+		A5C079902F3BFB54005E1164 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0796B2F3BFB54005E1164 /* ThemeManager.swift */; };
+		A5C079912F3BFB54005E1164 /* GraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0796D2F3BFB54005E1164 /* GraphViewModel.swift */; };
+		A5C079922F3BFB54005E1164 /* Double+Rounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0795B2F3BFB54005E1164 /* Double+Rounding.swift */; };
+		A5C079932F3BFB54005E1164 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0796E2F3BFB54005E1164 /* SettingsViewModel.swift */; };
+		A5C079942F3BFB54005E1164 /* IAPRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0797D2F3BFB54005E1164 /* IAPRow.swift */; };
+		A5C079952F3BFB54005E1164 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079682F3BFB54005E1164 /* AppState.swift */; };
+		A5C079962F3BFB54005E1164 /* Color+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0795A2F3BFB54005E1164 /* Color+Theme.swift */; };
+		A5C079972F3BFB54005E1164 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0797E2F3BFB54005E1164 /* SettingsView.swift */; };
+		A5C079982F3BFB54005E1164 /* MathModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079632F3BFB54005E1164 /* MathModels.swift */; };
+		A5C079992F3BFB54005E1164 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0796A2F3BFB54005E1164 /* HapticManager.swift */; };
+		A5C0799A2F3BFB54005E1164 /* FractionInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079712F3BFB54005E1164 /* FractionInputField.swift */; };
+		A5C0799D2F3BFB54005E1164 /* MathSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0795D2F3BFB54005E1164 /* MathSolver.swift */; };
+		A5C0799E2F3BFB54005E1164 /* TouchInteractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0797B2F3BFB54005E1164 /* TouchInteractionView.swift */; };
+		A5C0799F2F3BFB54005E1164 /* ControlPanelOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079762F3BFB54005E1164 /* ControlPanelOverlay.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A5C079392F3BFACA005E1164 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5C079212F3BFAC9005E1164 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5C079282F3BFAC9005E1164;
+			remoteInfo = MathGraphLab2;
+		};
+		A5C079432F3BFACA005E1164 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5C079212F3BFAC9005E1164 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5C079282F3BFAC9005E1164;
+			remoteInfo = MathGraphLab2;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A5C079292F3BFAC9005E1164 /* MathGraphLab2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MathGraphLab2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5C079382F3BFACA005E1164 /* MathGraphLab2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MathGraphLab2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5C079422F3BFACA005E1164 /* MathGraphLab2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MathGraphLab2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5C079562F3BFB54005E1164 /* FractionInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FractionInput.swift; sourceTree = "<group>"; };
+		A5C079572F3BFB54005E1164 /* ParameterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterInput.swift; sourceTree = "<group>"; };
+		A5C079592F3BFB54005E1164 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A5C0795A2F3BFB54005E1164 /* Color+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Theme.swift"; sourceTree = "<group>"; };
+		A5C0795B2F3BFB54005E1164 /* Double+Rounding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Rounding.swift"; sourceTree = "<group>"; };
+		A5C0795D2F3BFB54005E1164 /* MathSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathSolver.swift; sourceTree = "<group>"; };
+		A5C0795F2F3BFB54005E1164 /* MathGraphLabApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathGraphLabApp.swift; sourceTree = "<group>"; };
+		A5C079602F3BFB54005E1164 /* MathSolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathSolverTests.swift; sourceTree = "<group>"; };
+		A5C079622F3BFB54005E1164 /* CoordinateSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSystem.swift; sourceTree = "<group>"; };
+		A5C079632F3BFB54005E1164 /* MathModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathModels.swift; sourceTree = "<group>"; };
+		A5C079652F3BFB54005E1164 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A5C079682F3BFB54005E1164 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A5C0796A2F3BFB54005E1164 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		A5C0796B2F3BFB54005E1164 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		A5C0796D2F3BFB54005E1164 /* GraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewModel.swift; sourceTree = "<group>"; };
+		A5C0796E2F3BFB54005E1164 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		A5C079702F3BFB54005E1164 /* BannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdView.swift; sourceTree = "<group>"; };
+		A5C079712F3BFB54005E1164 /* FractionInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FractionInputField.swift; sourceTree = "<group>"; };
+		A5C079722F3BFB54005E1164 /* MonospacedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonospacedLabel.swift; sourceTree = "<group>"; };
+		A5C079732F3BFB54005E1164 /* ParameterSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterSlider.swift; sourceTree = "<group>"; };
+		A5C079752F3BFB54005E1164 /* AnalysisOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisOverlayView.swift; sourceTree = "<group>"; };
+		A5C079762F3BFB54005E1164 /* ControlPanelOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlPanelOverlay.swift; sourceTree = "<group>"; };
+		A5C079772F3BFB54005E1164 /* GraphCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCanvasView.swift; sourceTree = "<group>"; };
+		A5C079782F3BFB54005E1164 /* GraphLabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphLabView.swift; sourceTree = "<group>"; };
+		A5C079792F3BFB54005E1164 /* GridBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridBackgroundView.swift; sourceTree = "<group>"; };
+		A5C0797A2F3BFB54005E1164 /* SharePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePreviewView.swift; sourceTree = "<group>"; };
+		A5C0797B2F3BFB54005E1164 /* TouchInteractionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchInteractionView.swift; sourceTree = "<group>"; };
+		A5C0797D2F3BFB54005E1164 /* IAPRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPRow.swift; sourceTree = "<group>"; };
+		A5C0797E2F3BFB54005E1164 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A5C0792B2F3BFAC9005E1164 /* MathGraphLab2 */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MathGraphLab2;
+			sourceTree = "<group>";
+		};
+		A5C0793B2F3BFACA005E1164 /* MathGraphLab2Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MathGraphLab2Tests;
+			sourceTree = "<group>";
+		};
+		A5C079452F3BFACA005E1164 /* MathGraphLab2UITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MathGraphLab2UITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A5C079262F3BFAC9005E1164 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5C079352F3BFACA005E1164 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5C0793F2F3BFACA005E1164 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A5C079202F3BFAC9005E1164 = {
+			isa = PBXGroup;
+			children = (
+				A5C0792B2F3BFAC9005E1164 /* MathGraphLab2 */,
+				A5C0793B2F3BFACA005E1164 /* MathGraphLab2Tests */,
+				A5C079452F3BFACA005E1164 /* MathGraphLab2UITests */,
+				A5C0792A2F3BFAC9005E1164 /* Products */,
+				A5C079582F3BFB54005E1164 /* Components */,
+				A5C079592F3BFB54005E1164 /* ContentView.swift */,
+				A5C0795C2F3BFB54005E1164 /* Extensions */,
+				A5C0795E2F3BFB54005E1164 /* Logic */,
+				A5C0795F2F3BFB54005E1164 /* MathGraphLabApp.swift */,
+				A5C079612F3BFB54005E1164 /* MathGraphLabTests */,
+				A5C079642F3BFB54005E1164 /* Models */,
+				A5C079672F3BFB54005E1164 /* Resources */,
+				A5C079692F3BFB54005E1164 /* State */,
+				A5C0796C2F3BFB54005E1164 /* Utilities */,
+				A5C0796F2F3BFB54005E1164 /* ViewModels */,
+				A5C079802F3BFB54005E1164 /* Views */,
+			);
+			sourceTree = "<group>";
+		};
+		A5C0792A2F3BFAC9005E1164 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A5C079292F3BFAC9005E1164 /* MathGraphLab2.app */,
+				A5C079382F3BFACA005E1164 /* MathGraphLab2Tests.xctest */,
+				A5C079422F3BFACA005E1164 /* MathGraphLab2UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A5C079582F3BFB54005E1164 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A5C079562F3BFB54005E1164 /* FractionInput.swift */,
+				A5C079572F3BFB54005E1164 /* ParameterInput.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A5C0795C2F3BFB54005E1164 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A5C0795A2F3BFB54005E1164 /* Color+Theme.swift */,
+				A5C0795B2F3BFB54005E1164 /* Double+Rounding.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A5C0795E2F3BFB54005E1164 /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				A5C0795D2F3BFB54005E1164 /* MathSolver.swift */,
+			);
+			path = Logic;
+			sourceTree = "<group>";
+		};
+		A5C079612F3BFB54005E1164 /* MathGraphLabTests */ = {
+			isa = PBXGroup;
+			children = (
+				A5C079602F3BFB54005E1164 /* MathSolverTests.swift */,
+			);
+			path = MathGraphLabTests;
+			sourceTree = "<group>";
+		};
+		A5C079642F3BFB54005E1164 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A5C079622F3BFB54005E1164 /* CoordinateSystem.swift */,
+				A5C079632F3BFB54005E1164 /* MathModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A5C079672F3BFB54005E1164 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A5C079652F3BFB54005E1164 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A5C079692F3BFB54005E1164 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				A5C079682F3BFB54005E1164 /* AppState.swift */,
+			);
+			path = State;
+			sourceTree = "<group>";
+		};
+		A5C0796C2F3BFB54005E1164 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A5C0796A2F3BFB54005E1164 /* HapticManager.swift */,
+				A5C0796B2F3BFB54005E1164 /* ThemeManager.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A5C0796F2F3BFB54005E1164 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A5C0796D2F3BFB54005E1164 /* GraphViewModel.swift */,
+				A5C0796E2F3BFB54005E1164 /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A5C079742F3BFB54005E1164 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A5C079702F3BFB54005E1164 /* BannerAdView.swift */,
+				A5C079712F3BFB54005E1164 /* FractionInputField.swift */,
+				A5C079722F3BFB54005E1164 /* MonospacedLabel.swift */,
+				A5C079732F3BFB54005E1164 /* ParameterSlider.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A5C0797C2F3BFB54005E1164 /* GraphLab */ = {
+			isa = PBXGroup;
+			children = (
+				A5C079752F3BFB54005E1164 /* AnalysisOverlayView.swift */,
+				A5C079762F3BFB54005E1164 /* ControlPanelOverlay.swift */,
+				A5C079772F3BFB54005E1164 /* GraphCanvasView.swift */,
+				A5C079782F3BFB54005E1164 /* GraphLabView.swift */,
+				A5C079792F3BFB54005E1164 /* GridBackgroundView.swift */,
+				A5C0797A2F3BFB54005E1164 /* SharePreviewView.swift */,
+				A5C0797B2F3BFB54005E1164 /* TouchInteractionView.swift */,
+			);
+			path = GraphLab;
+			sourceTree = "<group>";
+		};
+		A5C0797F2F3BFB54005E1164 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A5C0797D2F3BFB54005E1164 /* IAPRow.swift */,
+				A5C0797E2F3BFB54005E1164 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A5C079802F3BFB54005E1164 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A5C079742F3BFB54005E1164 /* Components */,
+				A5C0797C2F3BFB54005E1164 /* GraphLab */,
+				A5C0797F2F3BFB54005E1164 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A5C079282F3BFAC9005E1164 /* MathGraphLab2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5C0794C2F3BFACA005E1164 /* Build configuration list for PBXNativeTarget "MathGraphLab2" */;
+			buildPhases = (
+				A5C079252F3BFAC9005E1164 /* Sources */,
+				A5C079262F3BFAC9005E1164 /* Frameworks */,
+				A5C079272F3BFAC9005E1164 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A5C0792B2F3BFAC9005E1164 /* MathGraphLab2 */,
+			);
+			name = MathGraphLab2;
+			packageProductDependencies = (
+			);
+			productName = MathGraphLab2;
+			productReference = A5C079292F3BFAC9005E1164 /* MathGraphLab2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A5C079372F3BFACA005E1164 /* MathGraphLab2Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5C0794F2F3BFACA005E1164 /* Build configuration list for PBXNativeTarget "MathGraphLab2Tests" */;
+			buildPhases = (
+				A5C079342F3BFACA005E1164 /* Sources */,
+				A5C079352F3BFACA005E1164 /* Frameworks */,
+				A5C079362F3BFACA005E1164 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A5C0793A2F3BFACA005E1164 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A5C0793B2F3BFACA005E1164 /* MathGraphLab2Tests */,
+			);
+			name = MathGraphLab2Tests;
+			packageProductDependencies = (
+			);
+			productName = MathGraphLab2Tests;
+			productReference = A5C079382F3BFACA005E1164 /* MathGraphLab2Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A5C079412F3BFACA005E1164 /* MathGraphLab2UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5C079522F3BFACA005E1164 /* Build configuration list for PBXNativeTarget "MathGraphLab2UITests" */;
+			buildPhases = (
+				A5C0793E2F3BFACA005E1164 /* Sources */,
+				A5C0793F2F3BFACA005E1164 /* Frameworks */,
+				A5C079402F3BFACA005E1164 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A5C079442F3BFACA005E1164 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A5C079452F3BFACA005E1164 /* MathGraphLab2UITests */,
+			);
+			name = MathGraphLab2UITests;
+			packageProductDependencies = (
+			);
+			productName = MathGraphLab2UITests;
+			productReference = A5C079422F3BFACA005E1164 /* MathGraphLab2UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A5C079212F3BFAC9005E1164 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					A5C079282F3BFAC9005E1164 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					A5C079372F3BFACA005E1164 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = A5C079282F3BFAC9005E1164;
+					};
+					A5C079412F3BFACA005E1164 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = A5C079282F3BFAC9005E1164;
+					};
+				};
+			};
+			buildConfigurationList = A5C079242F3BFAC9005E1164 /* Build configuration list for PBXProject "MathGraphLab2" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A5C079202F3BFAC9005E1164;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A5C0792A2F3BFAC9005E1164 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A5C079282F3BFAC9005E1164 /* MathGraphLab2 */,
+				A5C079372F3BFACA005E1164 /* MathGraphLab2Tests */,
+				A5C079412F3BFACA005E1164 /* MathGraphLab2UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A5C079272F3BFAC9005E1164 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5C079812F3BFB54005E1164 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5C079362F3BFACA005E1164 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5C079402F3BFACA005E1164 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A5C079252F3BFAC9005E1164 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5C079832F3BFB54005E1164 /* FractionInput.swift in Sources */,
+				A5C079842F3BFB54005E1164 /* GraphLabView.swift in Sources */,
+				A5C079852F3BFB54005E1164 /* AnalysisOverlayView.swift in Sources */,
+				A5C079862F3BFB54005E1164 /* MathGraphLabApp.swift in Sources */,
+				A5C079872F3BFB54005E1164 /* ParameterInput.swift in Sources */,
+				A5C079882F3BFB54005E1164 /* ParameterSlider.swift in Sources */,
+				A5C079892F3BFB54005E1164 /* GraphCanvasView.swift in Sources */,
+				A5C0798A2F3BFB54005E1164 /* GridBackgroundView.swift in Sources */,
+				A5C0798B2F3BFB54005E1164 /* BannerAdView.swift in Sources */,
+				A5C0798C2F3BFB54005E1164 /* CoordinateSystem.swift in Sources */,
+				A5C0798D2F3BFB54005E1164 /* ContentView.swift in Sources */,
+				A5C0798E2F3BFB54005E1164 /* MonospacedLabel.swift in Sources */,
+				A5C0798F2F3BFB54005E1164 /* SharePreviewView.swift in Sources */,
+				A5C079902F3BFB54005E1164 /* ThemeManager.swift in Sources */,
+				A5C079912F3BFB54005E1164 /* GraphViewModel.swift in Sources */,
+				A5C079922F3BFB54005E1164 /* Double+Rounding.swift in Sources */,
+				A5C079932F3BFB54005E1164 /* SettingsViewModel.swift in Sources */,
+				A5C079942F3BFB54005E1164 /* IAPRow.swift in Sources */,
+				A5C079952F3BFB54005E1164 /* AppState.swift in Sources */,
+				A5C079962F3BFB54005E1164 /* Color+Theme.swift in Sources */,
+				A5C079972F3BFB54005E1164 /* SettingsView.swift in Sources */,
+				A5C079982F3BFB54005E1164 /* MathModels.swift in Sources */,
+				A5C079992F3BFB54005E1164 /* HapticManager.swift in Sources */,
+				A5C0799A2F3BFB54005E1164 /* FractionInputField.swift in Sources */,
+				A5C0799D2F3BFB54005E1164 /* MathSolver.swift in Sources */,
+				A5C0799E2F3BFB54005E1164 /* TouchInteractionView.swift in Sources */,
+				A5C0799F2F3BFB54005E1164 /* ControlPanelOverlay.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5C079342F3BFACA005E1164 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5C0793E2F3BFACA005E1164 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A5C0793A2F3BFACA005E1164 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5C079282F3BFAC9005E1164 /* MathGraphLab2 */;
+			targetProxy = A5C079392F3BFACA005E1164 /* PBXContainerItemProxy */;
+		};
+		A5C079442F3BFACA005E1164 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5C079282F3BFAC9005E1164 /* MathGraphLab2 */;
+			targetProxy = A5C079432F3BFACA005E1164 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A5C0794A2F3BFACA005E1164 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 7R927F3U4V;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A5C0794B2F3BFACA005E1164 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 7R927F3U4V;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A5C0794D2F3BFACA005E1164 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R927F3U4V;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fumiakiMogi777.MathGraphLab2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A5C0794E2F3BFACA005E1164 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R927F3U4V;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fumiakiMogi777.MathGraphLab2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A5C079502F3BFACA005E1164 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R927F3U4V;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fumiakiMogi777.MathGraphLab2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MathGraphLab2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MathGraphLab2";
+			};
+			name = Debug;
+		};
+		A5C079512F3BFACA005E1164 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R927F3U4V;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fumiakiMogi777.MathGraphLab2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MathGraphLab2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MathGraphLab2";
+			};
+			name = Release;
+		};
+		A5C079532F3BFACA005E1164 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R927F3U4V;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fumiakiMogi777.MathGraphLab2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MathGraphLab2;
+			};
+			name = Debug;
+		};
+		A5C079542F3BFACA005E1164 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R927F3U4V;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fumiakiMogi777.MathGraphLab2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MathGraphLab2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A5C079242F3BFAC9005E1164 /* Build configuration list for PBXProject "MathGraphLab2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5C0794A2F3BFACA005E1164 /* Debug */,
+				A5C0794B2F3BFACA005E1164 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A5C0794C2F3BFACA005E1164 /* Build configuration list for PBXNativeTarget "MathGraphLab2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5C0794D2F3BFACA005E1164 /* Debug */,
+				A5C0794E2F3BFACA005E1164 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A5C0794F2F3BFACA005E1164 /* Build configuration list for PBXNativeTarget "MathGraphLab2Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5C079502F3BFACA005E1164 /* Debug */,
+				A5C079512F3BFACA005E1164 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A5C079522F3BFACA005E1164 /* Build configuration list for PBXNativeTarget "MathGraphLab2UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5C079532F3BFACA005E1164 /* Debug */,
+				A5C079542F3BFACA005E1164 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A5C079212F3BFAC9005E1164 /* Project object */;
+}
