@@ -2,199 +2,168 @@
 //  GraphCanvasView.swift
 //  MathGraph Lab
 //
-//  Layer 2: Graph rendering for parabola and line with ghosting
-//  Implements IDD Section 3.2 Layer 2 specifications
+//  Layer 1: Graph rendering
+//  Fixed: Incorrect argument labels in CoordinateSystem calls
 //
 
 import SwiftUI
 
-// MARK: - Graph Canvas View
-/// Renders the parabola and line functions
-/// Includes ghosting effect for previous state during drag operations
 struct GraphCanvasView: View {
     
     @EnvironmentObject var appState: AppState
     
-    // Graph configuration
-    private let mathRange: ClosedRange<Double> = -10...10
-    private let stepSize: Double = 0.1  // IDD: stride by 0.1 for smooth curves
-    private let lineWidth: CGFloat = 3.0
-    private let ghostLineWidth: CGFloat = 2.0
-    
     var body: some View {
-        Canvas { context, size in
-            // Create coordinate conversion helper
-            // Create coordinate conversion helper
-            let coordSystem = CoordinateSystem(
-                size: size,
-                zoomScale: appState.zoomScale,
-                panOffset: appState.panOffset
-            )
-            
-            // Draw ghost graphs first (behind current graphs)
-            if let previousParabola = appState.previousParabola {
-                drawParabola(
-                    context: context,
+        GeometryReader { geometry in
+            Canvas { context, size in
+                let system = CoordinateSystem(
                     size: size,
-                    parabola: previousParabola,
-                    coordSystem: coordSystem,
-                    isGhost: true
+                    zoomScale: appState.zoomScale,
+                    panOffset: appState.panOffset
                 )
+                
+                // 1. Draw Axes
+                drawAxes(context: context, system: system, size: size)
+                
+                // 2. Draw Parabola (Ghost & Real)
+                if let ghost = appState.previousParabola, appState.showParabolaGraph {
+                    drawParabola(context: context, system: system, parabola: ghost, color: .blue.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [5, 5]))
+                }
+                if appState.showParabolaGraph {
+                    drawParabola(context: context, system: system, parabola: appState.parabola, color: .blue, style: StrokeStyle(lineWidth: 3))
+                }
+                
+                // 3. Draw Line (Ghost & Real)
+                if let ghost = appState.previousLine, appState.showLinearGraph {
+                    drawLine(context: context, system: system, line: ghost, color: .red.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [5, 5]))
+                }
+                if appState.showLinearGraph {
+                    drawLine(context: context, system: system, line: appState.line, color: .red, style: StrokeStyle(lineWidth: 3))
+                }
             }
-            
-            if let previousLine = appState.previousLine {
-                drawLine(
-                    context: context,
-                    size: size,
-                    line: previousLine,
-                    coordSystem: coordSystem,
-                    isGhost: true
-                )
-            }
-            
-            // Draw current graphs on top
-            drawParabola(
-                context: context,
-                size: size,
-                parabola: appState.parabola,
-                coordSystem: coordSystem,
-                isGhost: false
-            )
-            
-            drawLine(
-                context: context,
-                size: size,
-                line: appState.line,
-                coordSystem: coordSystem,
-                isGhost: false
-            )
         }
+        .drawingGroup()
     }
     
-    // MARK: - Drawing Methods
+    // MARK: - Drawing Logic
     
-    /// Draw parabola: y = a(x - p)² + q
-    private func drawParabola(
-        context: GraphicsContext,
-        size: CGSize,
-        parabola: Parabola,
-        coordSystem: CoordinateSystem,
-        isGhost: Bool
-    ) {
-        // ★追加
-        guard appState.showParabolaGraph else { return }
+    private func drawAxes(context: GraphicsContext, system: CoordinateSystem, size: CGSize) {
+        // 修正: argument label 'from:'
+        let center = system.screenPosition(mathX: 0, mathY: 0)
         
+        // X Axis
+        let xAxisPath = Path { p in
+            p.move(to: CGPoint(x: 0, y: center.y))
+            p.addLine(to: CGPoint(x: size.width, y: center.y))
+        }
+        context.stroke(xAxisPath, with: .color(.black), lineWidth: 2)
+        
+        // Y Axis
+        let yAxisPath = Path { p in
+            p.move(to: CGPoint(x: center.x, y: 0))
+            p.addLine(to: CGPoint(x: center.x, y: size.height))
+        }
+        context.stroke(yAxisPath, with: .color(.black), lineWidth: 2)
+        
+        // Calculate visible range for dynamic numbering
+        // 修正: argument label 'from:'
+        let topLeft = system.mathPosition(from: CGPoint(x: 0, y: 0))
+        let bottomRight = system.mathPosition(from: CGPoint(x: size.width, y: size.height))
+        
+        let startX = Int(floor(topLeft.x))
+        let endX = Int(ceil(bottomRight.x))
+        let startY = Int(floor(bottomRight.y)) // Math Y increases upwards
+        let endY = Int(ceil(topLeft.y))
+        
+        // Draw Ticks and Numbers
+        for i in startX...endX {
+            if i == 0 { continue }
+            let pos = system.screenPosition(mathX: Double(i), mathY: 0)
+            
+            // Draw tick
+            let tickPath = Path { p in
+                p.move(to: CGPoint(x: pos.x, y: center.y - 5))
+                p.addLine(to: CGPoint(x: pos.x, y: center.y + 5))
+            }
+            context.stroke(tickPath, with: .color(.black), lineWidth: 1)
+            
+            // Draw number
+            let text = Text("\(i)").font(.system(size: 10))
+            context.draw(text, at: CGPoint(x: pos.x, y: center.y + 15))
+        }
+        
+        for i in startY...endY {
+            if i == 0 { continue }
+            let pos = system.screenPosition(mathX: 0, mathY: Double(i))
+            
+            // Draw tick
+            let tickPath = Path { p in
+                p.move(to: CGPoint(x: center.x - 5, y: pos.y))
+                p.addLine(to: CGPoint(x: center.x + 5, y: pos.y))
+            }
+            context.stroke(tickPath, with: .color(.black), lineWidth: 1)
+            
+            // Draw number
+            let text = Text("\(i)").font(.system(size: 10))
+            // Adjust text position to not overlap axis
+            context.draw(text, at: CGPoint(x: center.x - 15, y: pos.y))
+        }
+        
+        // Draw arrows
+        context.draw(Text("x").font(.system(size: 14, weight: .bold)), at: CGPoint(x: size.width - 15, y: center.y + 15))
+        context.draw(Text("y").font(.system(size: 14, weight: .bold)), at: CGPoint(x: center.x + 15, y: 15))
+    }
+    
+    private func drawParabola(context: GraphicsContext, system: CoordinateSystem, parabola: Parabola, color: Color, style: StrokeStyle) {
         var path = Path()
-        var isFirstPoint = true
+        let step = 2.0 / system.zoomScale // Dynamic resolution
+        let width = system.size.width
         
-        // IDD: Use stride(from: -10, through: 10, by: 0.1) for smooth curves
-        for x in stride(from: mathRange.lowerBound, through: mathRange.upperBound, by: stepSize) {
-            let y = parabola.evaluate(at: x)
+        var firstPoint = true
+        
+        // Iterate screen X pixels for smooth curve
+        for screenX in stride(from: 0, to: width, by: step) {
+            // 修正: argument label 'from:'
+            let mathPos = system.mathPosition(from: CGPoint(x: screenX, y: 0))
+            // y = a(x-p)^2 + q
+            let mathY = parabola.a * pow(mathPos.x - parabola.p, 2) + parabola.q
             
-            // Skip points that are too far outside visible range
-            guard abs(y) < 50 else { continue }
+            let screenPos = system.screenPosition(mathX: mathPos.x, mathY: mathY)
             
-            let screenPoint = coordSystem.screenPosition(mathX: x, mathY: y)
-            
-            // Check if point is within canvas bounds (with margin)
-            guard screenPoint.y >= -100 && screenPoint.y <= size.height + 100 else {
-                isFirstPoint = true
-                continue
+            // Clip largely out of bounds points to prevent drawing glitches
+            if screenPos.y > -1000 && screenPos.y < system.size.height + 1000 {
+                if firstPoint {
+                    path.move(to: screenPos)
+                    firstPoint = false
+                } else {
+                    path.addLine(to: screenPos)
+                }
             }
-            
-            if isFirstPoint {
-                path.move(to: screenPoint)
-                isFirstPoint = false
-            } else {
-                path.addLine(to: screenPoint)
-            }
         }
-        
-        // IDD Section 5: Parabola color is System Blue
-        let color = Color.blue
-        
-        if isGhost {
-            // Ghost style: dashed gray line
-            context.stroke(
-                path,
-                with: .color(Color.gray.opacity(0.4)),
-                style: StrokeStyle(
-                    lineWidth: ghostLineWidth,
-                    dash: [5, 5]
-                )
-            )
-        } else {
-            // Normal style: solid colored line
-            context.stroke(
-                path,
-                with: .color(color),
-                lineWidth: lineWidth
-            )
-        }
+        context.stroke(path, with: .color(color), style: style)
     }
     
-    /// Draw line: y = mx + n
-    private func drawLine(
-        context: GraphicsContext,
-        size: CGSize,
-        line: Line,
-        coordSystem: CoordinateSystem,
-        isGhost: Bool
-    ) {
-        // ★追加
-        guard appState.showLinearGraph else { return }
+    private func drawLine(context: GraphicsContext, system: CoordinateSystem, line: Line, color: Color, style: StrokeStyle) {
+        // Find intersection with visible bounds
+        // y = mx + n
+        // Simply draw from far left to far right of visible math coordinates
         
-        var path = Path()
+        // 修正: argument label 'from:'
+        let topLeft = system.mathPosition(from: CGPoint(x: 0, y: 0))
+        let bottomRight = system.mathPosition(from: CGPoint(x: system.size.width, y: system.size.height))
         
-        // For linear functions, we only need two points
-        // Calculate intersection with canvas boundaries
-        let mathBounds = coordSystem.mathBounds()
+        let startX = topLeft.x
+        let endX = bottomRight.x
         
-        let x1 = mathBounds.minX
-        let y1 = line.evaluate(at: x1)
+        let startY = line.m * startX + line.n
+        let endY = line.m * endX + line.n
         
-        let x2 = mathBounds.maxX
-        let y2 = line.evaluate(at: x2)
+        let p1 = system.screenPosition(mathX: startX, mathY: startY)
+        let p2 = system.screenPosition(mathX: endX, mathY: endY)
         
-        let point1 = coordSystem.screenPosition(mathX: x1, mathY: y1)
-        let point2 = coordSystem.screenPosition(mathX: x2, mathY: y2)
-        
-        path.move(to: point1)
-        path.addLine(to: point2)
-        
-        // IDD Section 5: Line color is System Red
-        let color = Color.red
-        
-        if isGhost {
-            // Ghost style: dashed gray line
-            context.stroke(
-                path,
-                with: .color(Color.gray.opacity(0.4)),
-                style: StrokeStyle(
-                    lineWidth: ghostLineWidth,
-                    dash: [5, 5]
-                )
-            )
-        } else {
-            // Normal style: solid colored line
-            context.stroke(
-                path,
-                with: .color(color),
-                lineWidth: lineWidth
-            )
+        let path = Path { p in
+            p.move(to: p1)
+            p.addLine(to: p2)
         }
+        context.stroke(path, with: .color(color), style: style)
     }
-    
-    // MARK: - Helper Methods
-    
-
-}
-
-// MARK: - Preview
-#Preview {
-    ZStack {
-        GridBackgroundView()
-        GraphCanvasView()
-    }
-    .environmentObject(AppState())
 }

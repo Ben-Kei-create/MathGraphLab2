@@ -2,300 +2,125 @@
 //  TouchInteractionView.swift
 //  MathGraph Lab
 //
-//  Layer 4: Touch interaction with tap to place points and zoom gestures
-//  修正版：ズームジェスチャーの安定性を改善
+//  Layer 4: Touch interaction with improved gesture handling
+//  最終版：作図モード中でもパン可能、タップとドラッグの明確な区別
 //
 
 import SwiftUI
 
-// MARK: - Touch Interaction View
-/// Handles drag gestures for parameter adjustment and geometry drawing
 struct TouchInteractionView: View {
     
     @EnvironmentObject var appState: AppState
     
-    // Interaction thresholds
-    private let proximityThreshold: Double = 0.5  // Math units
-    private let snapThreshold: Double = 0.3       // Snap to grid/point threshold
-    
-    // Gesture state
-    @State private var dragStartLocation: CGPoint = .zero
-    @State private var dragStartValue: Double = 0.0
-    @State private var isDraggingParabola: Bool = false
-    @State private var geometryStartPoint: CGPoint?
+    // ジェスチャー状態
+    @State private var currentScale: CGFloat = 1.0
+    @State private var currentOffset: CGSize = .zero
     
     var body: some View {
         GeometryReader { geometry in
             Color.clear
                 .contentShape(Rectangle())
+                
+                // 1. タップ（作図用）
+                .onTapGesture { location in
+                    handleTap(at: location, size: geometry.size)
+                }
+                
+                // 2. ドラッグ＆ズーム（同時認識）
                 .gesture(
-                    DragGesture(minimumDistance: 0)
-                        .onChanged { value in
-                            handleDragChanged(value: value, size: geometry.size)
-                        }
-                        .onEnded { value in
-                            handleDragEnded(value: value, size: geometry.size)
-                        }
+                    SimultaneousGesture(
+                        // ズーム（ピンチ）
+                        MagnificationGesture()
+                            .onChanged { scale in
+                                let delta = scale / currentScale
+                                currentScale = scale
+                                let newZoom = appState.zoomScale * delta
+                                appState.zoomScale = min(max(newZoom, 0.5), 5.0)
+                            }
+                            .onEnded { _ in
+                                currentScale = 1.0
+                                if appState.isHapticsEnabled {
+                                    HapticManager.shared.impact(style: .light)
+                                }
+                            },
+                        
+                        // パン（移動）
+                        // ★修正: minimumDistance を 10 にして、タップと明確に区別
+                        // 作図モード中でも移動可能に（guard削除）
+                        DragGesture(minimumDistance: 10)
+                            .onChanged { value in
+                                let delta = CGSize(
+                                    width: value.translation.width - currentOffset.width,
+                                    height: value.translation.height - currentOffset.height
+                                )
+                                currentOffset = value.translation
+                                appState.panOffset.width += delta.width
+                                appState.panOffset.height += delta.height
+                            }
+                            .onEnded { _ in
+                                currentOffset = .zero
+                            }
+                    )
                 )
-                .simultaneousGesture(
-                    TapGesture()
-                        .onEnded { _ in
-                            // Tap gesture is handled in onChanged when distance is minimal
-                        }
-                )
         }
     }
     
-    // MARK: - Gesture Handlers
+    // MARK: - Tap Handler
     
-    private func handleDragChanged(value: DragGesture.Value, size: CGSize) {
-        let coordSystem = CoordinateSystem(size: size)
-        let location = value.location
-        let mathPos = coordSystem.mathPosition(from: location)
+    private func handleTap(at location: CGPoint, size: CGSize) {
+        // 作図モードOFF時は何もしない
+        guard appState.isGeometryModeEnabled else { return }
         
-        // GEOMETRY MODE: Drawing points and line segments
-        if appState.isGeometryModeEnabled {
-            handleGeometryDrag(
-                location: location,
-                mathPos: mathPos,
-                coordSystem: coordSystem,
-                translation: value.translation
-            )
-            return
-        }
-        
-        // RUBBER BANDING MODE: Adjust parabola coefficient 'a'
-        if !isDraggingParabola {
-            // Check if touch is near the parabola curve
-            if isNearParabola(mathX: mathPos.x, mathY: mathPos.y) {
-                isDraggingParabola = true
-                dragStartLocation = location
-                dragStartValue = appState.parabola.a
-                appState.beginDrag()  // Enable ghosting
-                
-                // Haptic feedback on grab
-                if appState.isHapticsEnabled {
-                    HapticManager.shared.impact(style: .medium)
-                }
-            }
-        }
-        
-        if isDraggingParabola {
-            updateParabolaFromDrag(
-                currentLocation: location,
-                coordSystem: coordSystem
-            )
-        }
-    }
-    
-    private func handleDragEnded(value: DragGesture.Value, size: CGSize) {
-        let coordSystem = CoordinateSystem(size: size)
-        let mathPos = coordSystem.mathPosition(from: value.location)
-        
-        // GEOMETRY MODE: Finalize drawing
-        if appState.isGeometryModeEnabled {
-            finalizeGeometryDrag(
-                location: value.location,
-                mathPos: mathPos,
-                coordSystem: coordSystem
-            )
-            geometryStartPoint = nil
-            return
-        }
-        
-        // RUBBER BANDING MODE: End drag
-        if isDraggingParabola {
-            isDraggingParabola = false
-            appState.endDrag()  // Clear ghosting
-            
-            // Snap to integer if enabled
-            if appState.isGridSnapEnabled {
-                let snappedA = round(appState.parabola.a)
-                appState.updateParabolaA(snappedA)
-                
-                if appState.isHapticsEnabled {
-                    HapticManager.shared.impact(style: .light)
-                }
-            }
-        } else {
-            // Short tap without drag - could be a point placement
-            if value.translation.width < 5 && value.translation.height < 5 {
-                // This is a tap, not a drag
-                // Tap behavior can be handled here if needed
-            }
-        }
-    }
-    
-    // MARK: - Rubber Banding Logic
-    
-    /// Check if a point is near the parabola curve
-    /// Threshold: |y - a(x-p)²-q| < proximityThreshold
-    private func isNearParabola(mathX: Double, mathY: Double) -> Bool {
-        let expectedY = appState.parabola.evaluate(at: mathX)
-        let distance = abs(mathY - expectedY)
-        return distance < proximityThreshold
-    }
-    
-    /// Update parabola coefficient 'a' based on vertical drag
-    private func updateParabolaFromDrag(
-        currentLocation: CGPoint,
-        coordSystem: CoordinateSystem
-    ) {
-        // Calculate vertical drag distance in screen coordinates
-        let deltaY = currentLocation.y - dragStartLocation.y
-        
-        // Convert to math coordinates (sensitivity factor)
-        let sensitivity = 0.01  // Adjust for comfortable dragging
-        let deltaA = -deltaY * sensitivity  // Negative because Y is inverted
-        
-        let newA = dragStartValue + deltaA
-        appState.updateParabolaA(newA, snap: appState.isGridSnapEnabled)
-        
-        // Haptic feedback when crossing integer values
-        if appState.isHapticsEnabled {
-            let previousInt = Int(dragStartValue)
-            let currentInt = Int(appState.parabola.a)
-            if previousInt != currentInt {
-                HapticManager.shared.impact(style: .medium)
-            }
-        }
-    }
-    
-    // MARK: - Geometry Drawing Logic
-    
-    private func handleGeometryDrag(
-        location: CGPoint,
-        mathPos: (x: Double, y: Double),
-        coordSystem: CoordinateSystem,
-        translation: CGSize
-    ) {
-        if geometryStartPoint == nil {
-            // Start of drag - store starting point
-            geometryStartPoint = location
-            
-            // Add a point if this is just a tap (will be removed if it becomes a drag)
-            if translation.width < 5 && translation.height < 5 {
-                // Snap to grid if enabled
-                let finalX = appState.isGridSnapEnabled ? round(mathPos.x) : mathPos.x
-                let finalY = appState.isGridSnapEnabled ? round(mathPos.y) : mathPos.y
-                
-                appState.addGeometryPoint(
-                    at: location,
-                    graphX: finalX,
-                    graphY: finalY
-                )
-                
-                if appState.isHapticsEnabled {
-                    HapticManager.shared.impact(style: .light)
-                }
-            }
-        } else {
-            // Continuing drag - could be drawing a line
-            let dragDistance = hypot(
-                translation.width,
-                translation.height
-            )
-            
-            if dragDistance > 10 {
-                // This is a line drag, remove any point that was added
-                if let lastElement = appState.geometryElements.last,
-                   case .point = lastElement {
-                    appState.geometryElements.removeLast()
-                }
-            }
-        }
-    }
-    
-    private func finalizeGeometryDrag(
-        location: CGPoint,
-        mathPos: (x: Double, y: Double),
-        coordSystem: CoordinateSystem
-    ) {
-        guard let startPoint = geometryStartPoint else { return }
-        
-        let dragDistance = hypot(
-            location.x - startPoint.x,
-            location.y - startPoint.y
+        let system = CoordinateSystem(
+            size: size,
+            zoomScale: appState.zoomScale,
+            panOffset: appState.panOffset
         )
         
-        // If drag distance is significant, create a line segment
-        if dragDistance > 10 {
-            var endPoint = location
-            
-            // Snap to existing points if close enough
-            if appState.isGridSnapEnabled {
-                if let snapPoint = findNearbySnapPoint(
-                    at: location,
-                    coordSystem: coordSystem
-                ) {
-                    endPoint = snapPoint
-                    
-                    // Heavy haptic for snapping
-                    if appState.isHapticsEnabled {
-                        HapticManager.shared.impact(style: .heavy)
-                    }
+        // 画面座標 → 数学座標
+        let mathPos = system.mathPosition(from: location)
+        
+        // 削除判定：既存の点の近く（44px以内）をタップしたか？
+        if let index = appState.markedPoints.indices.reversed().first(where: { i in
+            let p = appState.markedPoints[i]
+            let pScreen = system.screenPosition(mathX: p.x, mathY: p.y)
+            return hypot(pScreen.x - location.x, pScreen.y - location.y) < 44
+        }) {
+            // 削除実行
+            appState.removeMarkedPoint(at: index)
+            if appState.isHapticsEnabled {
+                HapticManager.shared.impact(style: .medium)
+            }
+        } else {
+            // 追加実行（上限10個）
+            if appState.markedPoints.count < 10 {
+                var x = mathPos.x
+                var y = mathPos.y
+                
+                // グリッドスナップ（0.5刻み）
+                if appState.isGridSnapEnabled {
+                    x = round(x * 2) / 2
+                    y = round(y * 2) / 2
                 }
-            }
-            
-            appState.addGeometryLineSegment(start: startPoint, end: endPoint)
-        }
-    }
-    
-    /// Find nearby point to snap to (for geometry mode)
-    private func findNearbySnapPoint(
-        at location: CGPoint,
-        coordSystem: CoordinateSystem
-    ) -> CGPoint? {
-        let mathPos = coordSystem.mathPosition(from: location)
-        
-        // Check intersection points
-        for intersection in appState.intersectionPoints {
-            let screenPos = coordSystem.screenPosition(
-                mathX: intersection.x,
-                mathY: intersection.y
-            )
-            let distance = hypot(
-                location.x - screenPos.x,
-                location.y - screenPos.y
-            )
-            if distance < 20 {  // 20 points snap radius
-                return screenPos
-            }
-        }
-        
-        // Check existing geometry points
-        for element in appState.geometryElements {
-            if case .point(_, let x, let y) = element {
-                let screenPos = coordSystem.screenPosition(mathX: x, mathY: y)
-                let distance = hypot(
-                    location.x - screenPos.x,
-                    location.y - screenPos.y
-                )
-                if distance < 20 {
-                    return screenPos
+                
+                appState.addMarkedPoint(x: x, y: y)
+                if appState.isHapticsEnabled {
+                    HapticManager.shared.impact(style: .light)
+                }
+            } else {
+                print("⚠️ 点は最大10個までです")
+                if appState.isHapticsEnabled {
+                    HapticManager.shared.notification(type: .error)
                 }
             }
         }
-        
-        // Snap to grid if enabled
-        if appState.isGridSnapEnabled {
-            let snappedX = round(mathPos.x)
-            let snappedY = round(mathPos.y)
-            return coordSystem.screenPosition(mathX: snappedX, mathY: snappedY)
-        }
-        
-        return nil
     }
 }
 
-// MARK: - HapticManager is in Utilities/HapticManager.swift
-
-// MARK: - Preview
 #Preview {
     ZStack {
         GridBackgroundView()
         GraphCanvasView()
-        AnalysisOverlayView()
         TouchInteractionView()
     }
     .environmentObject(AppState())

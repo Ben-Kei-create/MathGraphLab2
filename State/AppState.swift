@@ -12,7 +12,7 @@ import Combine
 // MARK: - App State
 /// Global state object managing all data models and settings
 /// Acts as the Single Source of Truth for the application
-final class AppState: ObservableObject {
+final class AppState: ObservableObject { // ★ここ重要: ObservableObject を継承していること
     
     // MARK: - Core Parameters (IDD 2.1)
     
@@ -22,6 +22,13 @@ final class AppState: ObservableObject {
     // Graph visibility toggles
     @Published var showParabolaGraph: Bool = true
     @Published var showLinearGraph: Bool = true
+    
+    // ★追加: 高校数学モード（p, qを表示するかどうか）
+    @Published var showAdvancedParabola: Bool = false
+    
+    // ★追加: 数式ラベルの移動オフセット（ドラッグで動かした量）
+    @Published var parabolaLabelOffset: CGSize = .zero
+    @Published var lineLabelOffset: CGSize = .zero
     
     // Previous state for ghosting effect
     @Published var previousParabola: Parabola?
@@ -56,6 +63,14 @@ final class AppState: ObservableObject {
     // 2点から直線を自動生成したかどうかのフラグ
     @Published var isLineFromPoints: Bool = false
     
+    // Helper state for input mode
+    enum InputMode: String, CaseIterable, Identifiable {
+            case decimal = "小数"
+            case fraction = "分数"
+            var id: String { self.rawValue }
+        }
+        @Published var coefficientInputMode: InputMode = .decimal
+    
     // 連続する2点間の距離とペアを計算して返す
     var pointDistances: [(MarkedPoint, MarkedPoint, Double)] {
         var result: [(MarkedPoint, MarkedPoint, Double)] = []
@@ -75,13 +90,6 @@ final class AppState: ObservableObject {
     // 点のラベル管理（A, B, C, ...）
     private var pointLabelIndex: Int = 0
     
-    // Helper state for input mode
-    enum InputMode {
-        case decimal
-        case fraction
-    }
-    @Published var coefficientInputMode: InputMode = .decimal
-    
     // MARK: - Actions
     
     /// Updates parabola coefficient 'a' with validation
@@ -93,9 +101,8 @@ final class AppState: ObservableObject {
         parabola.a = newValue
     }
     
-    /// Updates parabola 'p' (Pro only)
+    /// Updates parabola 'p'
     func updateParabolaP(_ value: Double, snap: Bool = false) {
-        guard isProEnabled else { return }
         var newValue = max(-5.0, min(5.0, value))
         if snap {
             newValue = round(newValue)
@@ -103,9 +110,8 @@ final class AppState: ObservableObject {
         parabola.p = newValue
     }
     
-    /// Updates parabola 'q' (Pro only)
+    /// Updates parabola 'q'
     func updateParabolaQ(_ value: Double, snap: Bool = false) {
-        guard isProEnabled else { return }
         var newValue = max(-5.0, min(5.0, value))
         if snap {
             newValue = round(newValue)
@@ -125,22 +131,40 @@ final class AppState: ObservableObject {
         line.n = newValue
     }
     
-    /// 作図モードで点を追加
+    /// 作図モードで打った点を追加（最大10個）
     func addMarkedPoint(x: Double, y: Double) {
-        let label = generatePointLabel()
+        guard markedPoints.count < 10 else {
+            print("⚠️ 点は最大10個までです")
+            return
+        }
+        
+        let labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+        let label = labels[markedPoints.count]
+        
         let point = MarkedPoint(label: label, x: x, y: y)
         markedPoints.append(point)
         
         print("📍 点\(label)を追加: (\(String(format: "%.2f", x)), \(String(format: "%.2f", y)))")
     }
     
-    /// 点のラベルを生成（A, B, C, ...）
-    private func generatePointLabel() -> String {
-        let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        let index = pointLabelIndex % alphabet.count
-        let label = String(alphabet[alphabet.index(alphabet.startIndex, offsetBy: index)])
-        pointLabelIndex += 1
-        return label
+    /// 指定したインデックスの点を削除
+    func removeMarkedPoint(at index: Int) {
+        guard markedPoints.indices.contains(index) else { return }
+        let removed = markedPoints.remove(at: index)
+        print("🗑️ 点\(removed.label)を削除")
+        
+        // ラベルを再割り当て
+        relabelPoints()
+    }
+    
+    /// 点のラベルを再割り当て
+    private func relabelPoints() {
+        let labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+        for (index, _) in markedPoints.enumerated() {
+            if index < labels.count {
+                markedPoints[index].label = labels[index]
+            }
+        }
     }
     
     /// 打った点をすべてクリア
@@ -149,6 +173,7 @@ final class AppState: ObservableObject {
         pointLabelIndex = 0
         print("🗑️ すべての点をクリア")
     }
+    
     /// Resets zoom and pan to default
     func resetZoomAndPan() {
         zoomScale = 1.0
@@ -169,38 +194,20 @@ final class AppState: ObservableObject {
         let p1 = markedPoints[0]
         let p2 = markedPoints[1]
         
-        // Assuming MathSolver is available and has calculateLineEquation
-        // For this example, I'll provide a placeholder for MathSolver.calculateLineEquation
-        // In a real app, you'd have this utility.
-        // Example placeholder:
-        struct LineEquation {
-            let m: Double
-            let n: Double
-        }
-        
-        // Placeholder for MathSolver
-        class MathSolver {
-            static func calculateLineEquation(p1: MarkedPoint, p2: MarkedPoint) -> LineEquation? {
-                // Handle vertical line case
-                if p1.x == p2.x {
-                    return nil // Vertical line, cannot be represented as y = mx + n
-                }
-                
-                let m = (p2.y - p1.y) / (p2.x - p1.x)
-                let n = p1.y - m * p1.x
-                return LineEquation(m: m, n: n)
-            }
-        }
-        
-        if let equation = MathSolver.calculateLineEquation(p1: p1, p2: p2) {
-            updateLineM(equation.m)
-            updateLineN(equation.n)
-            isLineFromPoints = true
-            
-            print("✅ 直線を更新: y = \(String(format: "%.2f", equation.m))x + \(String(format: "%.2f", equation.n))")
-        } else {
+        // 垂直線はスキップ
+        if p1.x == p2.x {
             print("❌ 垂直線のため直線の式を生成できません")
+            return
         }
+        
+        let m = (p2.y - p1.y) / (p2.x - p1.x)
+        let n = p1.y - m * p1.x
+        
+        updateLineM(m)
+        updateLineN(n)
+        isLineFromPoints = true
+        
+        print("✅ 直線を更新: y = \(String(format: "%.2f", m))x + \(String(format: "%.2f", n))")
     }
     
     /// Begins a drag operation (enables ghosting)
@@ -221,16 +228,16 @@ final class AppState: ObservableObject {
         geometryElements.append(point)
     }
     
-    /// Adds a geometry line segment
-    func addGeometryLineSegment(start: CGPoint, end: CGPoint) {
-        // In a real implementation, we would convert screen points to graph coordinates here
-        // For now, we'll simplify IDD logic
-        // geometryElements.append(.lineSegment(...))
-    }
-    
     /// Clears all user-drawn geometry
     func clearGeometry() {
         geometryElements.removeAll()
+    }
+    
+    // ★追加: ラベル位置のリセット関数
+    func resetLabelPositions() {
+        parabolaLabelOffset = .zero
+        lineLabelOffset = .zero
+        if isHapticsEnabled { HapticManager.shared.impact(style: .medium) }
     }
     
     /// Resets all parameters to default
@@ -241,9 +248,12 @@ final class AppState: ObservableObject {
         isAreaModeEnabled = false
         isGeometryModeEnabled = false
         
-        // 追加
         clearMarkedPoints()
         resetZoom()
         isLineFromPoints = false
+        showAdvancedParabola = false // 中学生モードへ
+        
+        // ★追加: ラベル位置もリセット
+        resetLabelPositions()
     }
 }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A5BEBAC32F3C655E009A42F6 /* BannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BEBAC22F3C655E009A42F6 /* BannerAdView.swift */; };
+		A5BEBAC72F3C8AD5009A42F6 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = A5BEBAC62F3C8AD5009A42F6 /* GoogleMobileAds */; };
+		A5BEBAD32F3C95E9009A42F6 /* EquationOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BEBAD22F3C95E4009A42F6 /* EquationOverlayView.swift */; };
 		A5C079812F3BFB54005E1164 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C079652F3BFB54005E1164 /* Assets.xcassets */; };
 		A5C079842F3BFB54005E1164 /* GraphLabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079782F3BFB54005E1164 /* GraphLabView.swift */; };
 		A5C079852F3BFB54005E1164 /* AnalysisOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079752F3BFB54005E1164 /* AnalysisOverlayView.swift */; };
@@ -30,6 +33,8 @@
 		A5C0799D2F3BFB54005E1164 /* MathSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0795D2F3BFB54005E1164 /* MathSolver.swift */; };
 		A5C0799E2F3BFB54005E1164 /* TouchInteractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0797B2F3BFB54005E1164 /* TouchInteractionView.swift */; };
 		A5C0799F2F3BFB54005E1164 /* ControlPanelOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079762F3BFB54005E1164 /* ControlPanelOverlay.swift */; };
+		A5D24D172F3C638A00C275F6 /* MarkedPointsOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D24D162F3C638A00C275F6 /* MarkedPointsOverlayView.swift */; };
+		A5D24D192F3C63A100C275F6 /* DistanceLinesOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D24D182F3C63A100C275F6 /* DistanceLinesOverlayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +55,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A552F63E2F3C620D00309DF0 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
+		A5BEBAC22F3C655E009A42F6 /* BannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdView.swift; sourceTree = "<group>"; };
+		A5BEBAD22F3C95E4009A42F6 /* EquationOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquationOverlayView.swift; sourceTree = "<group>"; };
 		A5C079292F3BFAC9005E1164 /* MathGraphLab2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MathGraphLab2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5C079382F3BFACA005E1164 /* MathGraphLab2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MathGraphLab2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5C079422F3BFACA005E1164 /* MathGraphLab2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MathGraphLab2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,11 +86,26 @@
 		A5C0797B2F3BFB54005E1164 /* TouchInteractionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchInteractionView.swift; sourceTree = "<group>"; };
 		A5C0797D2F3BFB54005E1164 /* IAPRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPRow.swift; sourceTree = "<group>"; };
 		A5C0797E2F3BFB54005E1164 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A5D24D162F3C638A00C275F6 /* MarkedPointsOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedPointsOverlayView.swift; sourceTree = "<group>"; };
+		A5D24D182F3C63A100C275F6 /* DistanceLinesOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceLinesOverlayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A5BEBAD12F3C8D22009A42F6 /* Exceptions for "MathGraphLab2" folder in "MathGraphLab2" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A5C079282F3BFAC9005E1164 /* MathGraphLab2 */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A5C0792B2F3BFAC9005E1164 /* MathGraphLab2 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A5BEBAD12F3C8D22009A42F6 /* Exceptions for "MathGraphLab2" folder in "MathGraphLab2" target */,
+			);
 			path = MathGraphLab2;
 			sourceTree = "<group>";
 		};
@@ -103,6 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5BEBAC72F3C8AD5009A42F6 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +147,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A5BEBAC52F3C8AD5009A42F6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A5C079202F3BFAC9005E1164 = {
 			isa = PBXGroup;
 			children = (
@@ -142,6 +173,7 @@
 				A5C0796C2F3BFB54005E1164 /* Utilities */,
 				A5C0796F2F3BFB54005E1164 /* ViewModels */,
 				A5C079802F3BFB54005E1164 /* Views */,
+				A5BEBAC52F3C8AD5009A42F6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -242,6 +274,8 @@
 		A5C0797C2F3BFB54005E1164 /* GraphLab */ = {
 			isa = PBXGroup;
 			children = (
+				A5BEBAD22F3C95E4009A42F6 /* EquationOverlayView.swift */,
+				A552F63E2F3C620D00309DF0 /* Untitled.swift */,
 				A5C079752F3BFB54005E1164 /* AnalysisOverlayView.swift */,
 				A5C079762F3BFB54005E1164 /* ControlPanelOverlay.swift */,
 				A5C079772F3BFB54005E1164 /* GraphCanvasView.swift */,
@@ -249,6 +283,9 @@
 				A5C079792F3BFB54005E1164 /* GridBackgroundView.swift */,
 				A5C0797A2F3BFB54005E1164 /* SharePreviewView.swift */,
 				A5C0797B2F3BFB54005E1164 /* TouchInteractionView.swift */,
+				A5D24D162F3C638A00C275F6 /* MarkedPointsOverlayView.swift */,
+				A5D24D182F3C63A100C275F6 /* DistanceLinesOverlayView.swift */,
+				A5BEBAC22F3C655E009A42F6 /* BannerAdView.swift */,
 			);
 			path = GraphLab;
 			sourceTree = "<group>";
@@ -292,6 +329,7 @@
 			);
 			name = MathGraphLab2;
 			packageProductDependencies = (
+				A5BEBAC62F3C8AD5009A42F6 /* GoogleMobileAds */,
 			);
 			productName = MathGraphLab2;
 			productReference = A5C079292F3BFAC9005E1164 /* MathGraphLab2.app */;
@@ -375,6 +413,9 @@
 			);
 			mainGroup = A5C079202F3BFAC9005E1164;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A5BEBAC42F3C6691009A42F6 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A5C0792A2F3BFAC9005E1164 /* Products */;
 			projectDirPath = "";
@@ -421,6 +462,7 @@
 				A5C079852F3BFB54005E1164 /* AnalysisOverlayView.swift in Sources */,
 				A5C079862F3BFB54005E1164 /* MathGraphLabApp.swift in Sources */,
 				A5C079892F3BFB54005E1164 /* GraphCanvasView.swift in Sources */,
+				A5D24D192F3C63A100C275F6 /* DistanceLinesOverlayView.swift in Sources */,
 				A5C0798A2F3BFB54005E1164 /* GridBackgroundView.swift in Sources */,
 				A5C0798C2F3BFB54005E1164 /* CoordinateSystem.swift in Sources */,
 				A5C0798D2F3BFB54005E1164 /* ContentView.swift in Sources */,
@@ -431,7 +473,9 @@
 				A5C079922F3BFB54005E1164 /* Double+Rounding.swift in Sources */,
 				A5C079932F3BFB54005E1164 /* SettingsViewModel.swift in Sources */,
 				A5C079942F3BFB54005E1164 /* IAPRow.swift in Sources */,
+				A5BEBAD32F3C95E9009A42F6 /* EquationOverlayView.swift in Sources */,
 				A5C079952F3BFB54005E1164 /* AppState.swift in Sources */,
+				A5BEBAC32F3C655E009A42F6 /* BannerAdView.swift in Sources */,
 				A5C079962F3BFB54005E1164 /* Color+Theme.swift in Sources */,
 				A5C079972F3BFB54005E1164 /* SettingsView.swift in Sources */,
 				A5C079982F3BFB54005E1164 /* MathModels.swift in Sources */,
@@ -439,6 +483,7 @@
 				A5C0799D2F3BFB54005E1164 /* MathSolver.swift in Sources */,
 				A5C0799E2F3BFB54005E1164 /* TouchInteractionView.swift in Sources */,
 				A5C0799F2F3BFB54005E1164 /* ControlPanelOverlay.swift in Sources */,
+				A5D24D172F3C638A00C275F6 /* MarkedPointsOverlayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,11 +648,13 @@
 				DEVELOPMENT_TEAM = 7R927F3U4V;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MathGraphLab2/Info.plist;
+				INFOPLIST_KEY_GADApplicationIdentifier = "ca-app-pub-3940256099942544~1458002511";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save graph images to photo library.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "グラフ画像を保存するために写真ライブラリにアクセスします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save graph images to photo library.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "グラフ画像を保存するために写真ライブラリにアクセスします。";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -637,11 +684,13 @@
 				DEVELOPMENT_TEAM = 7R927F3U4V;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MathGraphLab2/Info.plist;
+				INFOPLIST_KEY_GADApplicationIdentifier = "ca-app-pub-3940256099942544~1458002511";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save graph images to photo library.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "グラフ画像を保存するために写真ライブラリにアクセスします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save graph images to photo library.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "グラフ画像を保存するために写真ライブラリにアクセスします。";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -785,6 +834,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A5BEBAC42F3C6691009A42F6 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 13.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A5BEBAC62F3C8AD5009A42F6 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A5BEBAC42F3C6691009A42F6 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A5C079212F3BFAC9005E1164 /* Project object */;
 }

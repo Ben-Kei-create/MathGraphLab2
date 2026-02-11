@@ -87,7 +87,7 @@ struct IntersectionPoint: Identifiable, Equatable {
 /// 作図モードでユーザーが打った点
 struct MarkedPoint: Identifiable, Equatable {
     let id: UUID = UUID()
-    let label: String  // "A", "B", "C", ...
+    var label: String  // "A", "B", "C", ...
     let x: Double
     let y: Double
     

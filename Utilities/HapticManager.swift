@@ -10,6 +10,7 @@ class HapticManager {
     private let heavyGenerator = UIImpactFeedbackGenerator(style: .heavy)
     private let softGenerator = UIImpactFeedbackGenerator(style: .soft)
     private let rigidGenerator = UIImpactFeedbackGenerator(style: .rigid)
+    private let notificationGenerator = UINotificationFeedbackGenerator()
     
     private init() {
         lightGenerator.prepare()
@@ -17,6 +18,7 @@ class HapticManager {
         heavyGenerator.prepare()
         softGenerator.prepare()
         rigidGenerator.prepare()
+        notificationGenerator.prepare()
     }
     
     /// Trigger impact feedback
@@ -43,5 +45,11 @@ class HapticManager {
             mediumGenerator.impactOccurred()
             mediumGenerator.prepare()
         }
+    }
+
+    /// 通知フィードバック（成功/警告/エラー）
+    func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
+        notificationGenerator.notificationOccurred(type)
+        notificationGenerator.prepare()
     }
 }
