@@ -3,7 +3,7 @@
 //  MathGraph Lab
 //
 //  Layer 5: Control panel with coordinate input mode
-//  Update: Added "Reset Labels" button
+//  Fixed: Method call error ($appState -> appState)
 //
 
 import SwiftUI
@@ -85,11 +85,13 @@ struct ControlPanelOverlay: View {
                 )
             }
             
+            // 修正後（$を取るだけ！）
             if appState.isGeometryModeEnabled {
                 Button(action: {
+                    // 直接 appState を呼び出します
                     appState.clearMarkedPoints()
                     appState.clearGeometry()
-                }) {
+                }){
                     Image(systemName: "trash")
                         .font(.system(size: 20))
                         .foregroundColor(.white)
@@ -105,7 +107,6 @@ struct ControlPanelOverlay: View {
     // MARK: - Panel Content
     private var panelContent: some View {
         VStack(spacing: 0) {
-            // ヘッダー
             HStack {
                 if appState.isGeometryModeEnabled {
                     Text("作図・座標入力").font(.system(size: 14, weight: .bold)).foregroundColor(.secondary)
@@ -121,8 +122,6 @@ struct ControlPanelOverlay: View {
                         .pickerStyle(.segmented)
                         .frame(width: 120)
                         
-                        // ★追加: ラベル位置リセットボタン
-                        // (ラベルが移動しているときだけ表示)
                         if appState.parabolaLabelOffset != .zero || appState.lineLabelOffset != .zero {
                             Button(action: {
                                 withAnimation {
@@ -152,23 +151,11 @@ struct ControlPanelOverlay: View {
             .padding()
             .background(Color(uiColor: .secondarySystemBackground))
             
-            // トグルボタン列
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
-                    Toggle(isOn: $appState.isAreaModeEnabled) {
-                        Label("面積", systemImage: "triangle").font(.system(size: 12))
-                    }
-                    .toggleStyle(.button).tint(.green)
-                    
-                    Toggle(isOn: $appState.isGeometryModeEnabled) {
-                        Label("作図", systemImage: "pencil.tip.crop.circle").font(.system(size: 12))
-                    }
-                    .toggleStyle(.button).tint(.orange)
-                    
-                    Toggle(isOn: $appState.showDistances) {
-                        Label("距離", systemImage: "ruler").font(.system(size: 12))
-                    }
-                    .toggleStyle(.button).tint(.purple)
+                    Toggle(isOn: $appState.isAreaModeEnabled) { Label("面積", systemImage: "triangle").font(.system(size: 12)) }.toggleStyle(.button).tint(.green)
+                    Toggle(isOn: $appState.isGeometryModeEnabled) { Label("作図", systemImage: "pencil.tip.crop.circle").font(.system(size: 12)) }.toggleStyle(.button).tint(.orange)
+                    Toggle(isOn: $appState.showDistances) { Label("距離", systemImage: "ruler").font(.system(size: 12)) }.toggleStyle(.button).tint(.purple)
                 }
                 .padding(.horizontal).padding(.vertical, 10)
             }
@@ -190,53 +177,33 @@ struct ControlPanelOverlay: View {
         .padding(.horizontal, 10).padding(.bottom, 10)
     }
     
-    // ... (以下、functionParameterSection や GeometryInputSection は元のコードのまま変更なしでOKですが、
-    // ビルドエラー防止のため、必ずファイルの最後まで記述してください) ...
-    
     // MARK: - Function Parameters
     private var functionParameterSection: some View {
         VStack(spacing: 20) {
-            
-            // --- 放物線設定 ---
             VStack(spacing: 10) {
                 HStack {
                     Text("放物線").font(.headline).foregroundColor(.blue)
                     Spacer()
-                    
                     HStack(spacing: 8) {
-                        Text(appState.showAdvancedParabola ? "高校" : "中学")
-                            .font(.caption).foregroundColor(.secondary)
-                        Toggle("p, q", isOn: $appState.showAdvancedParabola)
-                            .labelsHidden()
-                            .toggleStyle(SwitchToggleStyle(tint: .blue))
+                        Text(appState.showAdvancedParabola ? "高校" : "中学").font(.caption).foregroundColor(.secondary)
+                        Toggle("p, q", isOn: $appState.showAdvancedParabola).labelsHidden().toggleStyle(SwitchToggleStyle(tint: .blue))
                     }
                     .padding(.trailing, 8)
-                    
                     Button(action: { appState.showParabolaGraph.toggle() }) {
-                        Image(systemName: appState.showParabolaGraph ? "eye" : "eye.slash")
-                            .foregroundColor(appState.showParabolaGraph ? .blue : .gray)
-                            .font(.system(size: 20))
+                        Image(systemName: appState.showParabolaGraph ? "eye" : "eye.slash").foregroundColor(appState.showParabolaGraph ? .blue : .gray).font(.system(size: 20))
                     }
                 }
-                
                 if appState.showParabolaGraph {
                     if appState.coefficientInputMode == .decimal {
                         ParameterInput(label: "a", text: $aText, range: -5.0...5.0, color: .blue) { appState.updateParabolaA($0) }
                     } else {
                         FractionInput(label: "a", numerator: $aNum, denominator: $aDen, color: .blue) { val in appState.updateParabolaA(val) }
                     }
-                    
                     if appState.showAdvancedParabola {
                         if appState.coefficientInputMode == .decimal {
                             HStack(spacing: 16) {
-                                ParameterSlider(label: "p", value: Binding(
-                                    get: { appState.parabola.p },
-                                    set: { appState.updateParabolaP($0, snap: appState.isGridSnapEnabled) }
-                                ), range: -5...5, color: .blue)
-                                ParameterSlider(label: "q", value: Binding(
-                                    get: { appState.parabola.q },
-                                    set: { appState.updateParabolaQ($0, snap: appState.isGridSnapEnabled) }
-                                ), range: -5...5, color: .blue)
+                                ParameterSlider(label: "p", value: Binding(get: { appState.parabola.p }, set: { appState.updateParabolaP($0, snap: appState.isGridSnapEnabled) }), range: -5...5, color: .blue)
+                                ParameterSlider(label: "q", value: Binding(get: { appState.parabola.q }, set: { appState.updateParabolaQ($0, snap: appState.isGridSnapEnabled) }), range: -5...5, color: .blue)
                             }
                         } else {
                             HStack(spacing: 16) {
@@ -247,32 +214,21 @@ struct ControlPanelOverlay: View {
                     }
                 }
             }
-            .padding(12)
-            .background(RoundedRectangle(cornerRadius: 12).fill(Color.blue.opacity(0.05)))
+            .padding(12).background(RoundedRectangle(cornerRadius: 12).fill(Color.blue.opacity(0.05)))
             
-            // --- 直線設定 ---
             VStack(spacing: 10) {
                 HStack {
                     Text("直線").font(.headline).foregroundColor(.red)
                     Spacer()
                     Button(action: { appState.showLinearGraph.toggle() }) {
-                        Image(systemName: appState.showLinearGraph ? "eye" : "eye.slash")
-                            .foregroundColor(appState.showLinearGraph ? .red : .gray)
-                            .font(.system(size: 20))
+                        Image(systemName: appState.showLinearGraph ? "eye" : "eye.slash").foregroundColor(appState.showLinearGraph ? .red : .gray).font(.system(size: 20))
                     }
                 }
-                
                 if appState.showLinearGraph {
                     if appState.coefficientInputMode == .decimal {
                         HStack(spacing: 16) {
-                            ParameterSlider(label: "m", value: Binding(
-                                get: { appState.line.m },
-                                set: { appState.updateLineM($0) }
-                            ), range: -5...5, color: .red)
-                            ParameterSlider(label: "n", value: Binding(
-                                get: { appState.line.n },
-                                set: { appState.updateLineN($0) }
-                            ), range: -10...10, color: .red)
+                            ParameterSlider(label: "m", value: Binding(get: { appState.line.m }, set: { appState.updateLineM($0) }), range: -5...5, color: .red)
+                            ParameterSlider(label: "n", value: Binding(get: { appState.line.n }, set: { appState.updateLineN($0) }), range: -10...10, color: .red)
                         }
                     } else {
                         HStack(spacing: 16) {
@@ -282,9 +238,7 @@ struct ControlPanelOverlay: View {
                     }
                 }
             }
-            .padding(12)
-            .background(RoundedRectangle(cornerRadius: 12).fill(Color.red.opacity(0.05)))
-            
+            .padding(12).background(RoundedRectangle(cornerRadius: 12).fill(Color.red.opacity(0.05)))
             Color.clear.frame(height: 20)
         }
         .padding()

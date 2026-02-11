@@ -27,15 +27,15 @@ struct SettingsView: View {
                 // MARK: - Appearance
                 Section("外観") {
                     Picker("テーマ", selection: $appState.appTheme) {
-                        Text("ノート (Light)").tag("light")
-                        Text("ダークモード").tag("dark")
-                        Text("黒板 (Pro)").tag("blackboard")
+                        // AppState.AppTheme として参照
+                        ForEach(AppState.AppTheme.allCases) { theme in
+                            Text(theme.rawValue).tag(theme)
+                        }
                     }
                     .pickerStyle(.menu)
                     .onChange(of: appState.appTheme) { oldValue, newValue in
-                        if newValue == "blackboard" && !appState.isProEnabled {
-                            // Revert if locked
-                            appState.appTheme = "light"
+                        if newValue == .blackboard && !appState.isProEnabled {
+                            appState.appTheme = .light
                         }
                     }
                 }
@@ -76,9 +76,4 @@ struct SettingsView: View {
             .navigationTitle("設定")
         }
     }
-}
-
-#Preview {
-    SettingsView()
-        .environmentObject(AppState())
 }

@@ -221,35 +221,35 @@ struct GridBackgroundView: View {
     /// Get background color based on theme
     private func getBackgroundColor() -> Color {
         switch appState.appTheme {
-        case "dark":
-            return Color.black
-        case "blackboard":
-            return Color(red: 0, green: 0.3, blue: 0)  // Dark green #004d00
-        default:  // "light"
+        case .light:
             return Color.white
+        case .dark:
+            return Color(white: 0.05)
+        case .blackboard:
+            return Color(red: 0.0, green: 0.2, blue: 0.15)
         }
     }
     
     /// Get theme-specific colors for grid elements
     private func getThemeColors() -> (grid: Color, axis: Color, text: Color) {
         switch appState.appTheme {
-        case "dark":
+        case .light:
             return (
-                grid: Color.gray.opacity(0.3),
+                grid: Color.black.opacity(0.1),
+                axis: Color.black.opacity(0.8),
+                text: Color.black.opacity(0.7)
+            )
+        case .dark:
+            return (
+                grid: Color.white.opacity(0.2),
                 axis: Color.white.opacity(0.8),
                 text: Color.white.opacity(0.7)
             )
-        case "blackboard":
+        case .blackboard:
             return (
-                grid: Color.green.opacity(0.2),
-                axis: Color.green.opacity(0.8),
-                text: Color.green.opacity(0.7)
-            )
-        default:  // "light"
-            return (
-                grid: Color.gray.opacity(0.2),
-                axis: Color.black.opacity(0.8),
-                text: Color.black.opacity(0.7)
+                grid: Color.white.opacity(0.15),
+                axis: Color.white.opacity(0.85),
+                text: Color.white.opacity(0.75)
             )
         }
     }
