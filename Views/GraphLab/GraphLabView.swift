@@ -10,7 +10,8 @@ import SwiftUI
 struct GraphLabView: View {
     
     @EnvironmentObject var appState: AppState
-    
+    @State private var showExportSheet = false
+
     var body: some View {
         // ★ここが重要！これがないと上のバーが出ません
         NavigationStack {
@@ -48,10 +49,13 @@ struct GraphLabView: View {
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
                 }
                 
-                // シェアボタン & 原点リセット
+                // エクスポート & 原点リセット
                 ToolbarItem(placement: .navigationBarLeading) {
                     HStack(spacing: 12) {
-                        ShareButton()
+                        // エクスポートボタン
+                        Button(action: { showExportSheet = true }) {
+                            Image(systemName: "square.and.arrow.up")
+                        }
 
                         // 原点リセットボタン（ズーム・パンを初期化）
                         Button(action: {
@@ -72,6 +76,10 @@ struct GraphLabView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     settingsMenu
                 }
+            }
+            .sheet(isPresented: $showExportSheet) {
+                ExportSheetView()
+                    .environmentObject(appState)
             }
         }
     }
@@ -167,36 +175,3 @@ struct GraphLabView: View {
     }
 }
 
-// MARK: - Share Button Component
-struct ShareButton: View {
-    var body: some View {
-        Button(action: shareAction) {
-            Image(systemName: "square.and.arrow.up")
-        }
-    }
-    
-    func shareAction() {
-        // 現在のウィンドウを取得
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first else { return }
-        
-        // スクリーンショットを撮影
-        let renderer = UIGraphicsImageRenderer(bounds: window.bounds)
-        let image = renderer.image { context in
-            window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
-        }
-        
-        // シェアシートを表示
-        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        
-        if let rootVC = window.rootViewController {
-            // iPad対応: ポップオーバーの位置設定
-            if let popover = activityVC.popoverPresentationController {
-                popover.sourceView = rootVC.view
-                popover.sourceRect = CGRect(x: 50, y: 50, width: 0, height: 0)
-                popover.permittedArrowDirections = []
-            }
-            rootVC.present(activityVC, animated: true, completion: nil)
-        }
-    }
-}
