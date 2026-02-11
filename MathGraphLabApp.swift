@@ -23,8 +23,8 @@ struct MathGraphLabApp: App {
     
     var body: some Scene {
         WindowGroup {
-            // メイン画面（GraphLabView）を表示
-            GraphLabView()
+            // メイン画面（ContentView）を表示 - TabViewでGraphLabとSettingsを管理
+            ContentView()
                 .environmentObject(appState)
         }
     }

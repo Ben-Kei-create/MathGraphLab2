@@ -52,7 +52,12 @@ struct GraphLabView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     ShareButton()
                 }
-                
+
+                // テーマ切り替えボタン
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    ThemeToggleButton(appTheme: $appState.appTheme)
+                }
+
                 // 設定メニュー
                 ToolbarItem(placement: .navigationBarTrailing) {
                     settingsMenu
@@ -152,6 +157,43 @@ struct GraphLabView: View {
     }
 }
 
+// MARK: - Theme Toggle Button Component
+struct ThemeToggleButton: View {
+    @Binding var appTheme: AppState.AppTheme
+    @Environment(\.colorScheme) var systemColorScheme
+
+    var body: some View {
+        Button(action: cycleTheme) {
+            Image(systemName: themeIcon)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.accentColor)
+                .contentShape(Rectangle())
+        }
+        .accessibilityLabel("テーマ切り替え")
+        .accessibilityValue(appTheme.rawValue)
+    }
+
+    private var themeIcon: String {
+        switch appTheme {
+        case .light:
+            return "sun.max"
+        case .dark:
+            return "moon"
+        case .blackboard:
+            return "square.fill"
+        }
+    }
+
+    private func cycleTheme() {
+        let themes = AppState.AppTheme.allCases
+        if let currentIndex = themes.firstIndex(of: appTheme) {
+            let nextIndex = (currentIndex + 1) % themes.count
+            appTheme = themes[nextIndex]
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+}
+
 // MARK: - Share Button Component
 struct ShareButton: View {
     var body: some View {
@@ -159,21 +201,21 @@ struct ShareButton: View {
             Image(systemName: "square.and.arrow.up")
         }
     }
-    
+
     func shareAction() {
         // 現在のウィンドウを取得
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let window = windowScene.windows.first else { return }
-        
+
         // スクリーンショットを撮影
         let renderer = UIGraphicsImageRenderer(bounds: window.bounds)
         let image = renderer.image { context in
             window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
         }
-        
+
         // シェアシートを表示
         let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        
+
         if let rootVC = window.rootViewController {
             // iPad対応: ポップオーバーの位置設定
             if let popover = activityVC.popoverPresentationController {
