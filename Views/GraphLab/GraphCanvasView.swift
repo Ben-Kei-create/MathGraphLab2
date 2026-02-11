@@ -24,7 +24,12 @@ struct GraphCanvasView: View {
     var body: some View {
         Canvas { context, size in
             // Create coordinate conversion helper
-            let gridView = GridBackgroundView()
+            // Create coordinate conversion helper
+            let coordSystem = CoordinateSystem(
+                size: size,
+                zoomScale: appState.zoomScale,
+                panOffset: appState.panOffset
+            )
             
             // Draw ghost graphs first (behind current graphs)
             if let previousParabola = appState.previousParabola {
@@ -32,7 +37,7 @@ struct GraphCanvasView: View {
                     context: context,
                     size: size,
                     parabola: previousParabola,
-                    gridView: gridView,
+                    coordSystem: coordSystem,
                     isGhost: true
                 )
             }
@@ -42,7 +47,7 @@ struct GraphCanvasView: View {
                     context: context,
                     size: size,
                     line: previousLine,
-                    gridView: gridView,
+                    coordSystem: coordSystem,
                     isGhost: true
                 )
             }
@@ -52,7 +57,7 @@ struct GraphCanvasView: View {
                 context: context,
                 size: size,
                 parabola: appState.parabola,
-                gridView: gridView,
+                coordSystem: coordSystem,
                 isGhost: false
             )
             
@@ -60,7 +65,7 @@ struct GraphCanvasView: View {
                 context: context,
                 size: size,
                 line: appState.line,
-                gridView: gridView,
+                coordSystem: coordSystem,
                 isGhost: false
             )
         }
@@ -73,9 +78,12 @@ struct GraphCanvasView: View {
         context: GraphicsContext,
         size: CGSize,
         parabola: Parabola,
-        gridView: GridBackgroundView,
+        coordSystem: CoordinateSystem,
         isGhost: Bool
     ) {
+        // ★追加
+        guard appState.showParabolaGraph else { return }
+        
         var path = Path()
         var isFirstPoint = true
         
@@ -86,7 +94,7 @@ struct GraphCanvasView: View {
             // Skip points that are too far outside visible range
             guard abs(y) < 50 else { continue }
             
-            let screenPoint = gridView.screenPosition(mathX: x, mathY: y, in: size)
+            let screenPoint = coordSystem.screenPosition(mathX: x, mathY: y)
             
             // Check if point is within canvas bounds (with margin)
             guard screenPoint.y >= -100 && screenPoint.y <= size.height + 100 else {
@@ -130,14 +138,17 @@ struct GraphCanvasView: View {
         context: GraphicsContext,
         size: CGSize,
         line: Line,
-        gridView: GridBackgroundView,
+        coordSystem: CoordinateSystem,
         isGhost: Bool
     ) {
+        // ★追加
+        guard appState.showLinearGraph else { return }
+        
         var path = Path()
         
         // For linear functions, we only need two points
         // Calculate intersection with canvas boundaries
-        let mathBounds = getMathBounds(for: size, gridView: gridView)
+        let mathBounds = coordSystem.mathBounds()
         
         let x1 = mathBounds.minX
         let y1 = line.evaluate(at: x1)
@@ -145,8 +156,8 @@ struct GraphCanvasView: View {
         let x2 = mathBounds.maxX
         let y2 = line.evaluate(at: x2)
         
-        let point1 = gridView.screenPosition(mathX: x1, mathY: y1, in: size)
-        let point2 = gridView.screenPosition(mathX: x2, mathY: y2, in: size)
+        let point1 = coordSystem.screenPosition(mathX: x1, mathY: y1)
+        let point2 = coordSystem.screenPosition(mathX: x2, mathY: y2)
         
         path.move(to: point1)
         path.addLine(to: point2)
@@ -176,26 +187,7 @@ struct GraphCanvasView: View {
     
     // MARK: - Helper Methods
     
-    /// Get the visible mathematical bounds for current canvas size
-    private func getMathBounds(
-        for size: CGSize,
-        gridView: GridBackgroundView
-    ) -> (minX: Double, maxX: Double, minY: Double, maxY: Double) {
-        // Convert screen corners to math coordinates
-        let topLeft = gridView.mathPosition(screenX: 0, screenY: 0, in: size)
-        let bottomRight = gridView.mathPosition(
-            screenX: size.width,
-            screenY: size.height,
-            in: size
-        )
-        
-        return (
-            minX: topLeft.x,
-            maxX: bottomRight.x,
-            minY: bottomRight.y,  // Note: inverted Y
-            maxY: topLeft.y
-        )
-    }
+
 }
 
 // MARK: - Preview

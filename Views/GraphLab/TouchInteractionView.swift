@@ -2,8 +2,8 @@
 //  TouchInteractionView.swift
 //  MathGraph Lab
 //
-//  Layer 4: Touch interaction for rubber banding and geometry drawing
-//  Implements IDD Section 3.2 Layer 4 specifications
+//  Layer 4: Touch interaction with tap to place points and zoom gestures
+//  修正版：ズームジェスチャーの安定性を改善
 //
 
 import SwiftUI

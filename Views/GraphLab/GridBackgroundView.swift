@@ -187,47 +187,33 @@ struct GridBackgroundView: View {
     ///   - size: Canvas size
     /// - Returns: Screen position as CGPoint
     func screenPosition(mathX: Double, mathY: Double, in size: CGSize) -> CGPoint {
-        // Scale factor: how many screen points per math unit
-        // Use smaller dimension to ensure graph fits
-        let scale = min(size.width, size.height) / 12.0  // Show ~±6 units
-        
-        // Origin is at center of screen
-        let centerX = size.width / 2.0
-        let centerY = size.height / 2.0
-        
-        // Convert math coordinates to screen coordinates
-        // Note: Y-axis is inverted in screen coordinates (down is positive)
-        let screenX = centerX + mathX * scale
-        let screenY = centerY - mathY * scale  // Invert Y
-        
-        return CGPoint(x: screenX, y: screenY)
+        let coordSystem = CoordinateSystem(
+            size: size,
+            zoomScale: appState.zoomScale,
+            panOffset: appState.panOffset
+        )
+        return coordSystem.screenPosition(mathX: mathX, mathY: mathY)
     }
     
     /// Convert screen coordinates back to mathematical coordinates
     /// Inverse of screenPosition function
     func mathPosition(screenX: Double, screenY: Double, in size: CGSize) -> (x: Double, y: Double) {
-        let scale = min(size.width, size.height) / 12.0
-        let centerX = size.width / 2.0
-        let centerY = size.height / 2.0
-        
-        let mathX = (screenX - centerX) / scale
-        let mathY = (centerY - screenY) / scale  // Invert Y
-        
-        return (mathX, mathY)
+        let coordSystem = CoordinateSystem(
+            size: size,
+            zoomScale: appState.zoomScale,
+            panOffset: appState.panOffset
+        )
+        return coordSystem.mathPosition(screenX: screenX, screenY: screenY)
     }
     
     /// Get the visible mathematical bounds for current canvas size
     private func getMathBounds(for size: CGSize) -> (minX: Double, maxX: Double, minY: Double, maxY: Double) {
-        let scale = min(size.width, size.height) / 12.0
-        let rangeX = size.width / scale / 2.0
-        let rangeY = size.height / scale / 2.0
-        
-        return (
-            minX: -rangeX,
-            maxX: rangeX,
-            minY: -rangeY,
-            maxY: rangeY
+        let coordSystem = CoordinateSystem(
+            size: size,
+            zoomScale: appState.zoomScale,
+            panOffset: appState.panOffset
         )
+        return coordSystem.mathBounds()
     }
     
     // MARK: - Theme Support (IDD Section 5)

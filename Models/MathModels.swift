@@ -83,6 +83,20 @@ struct IntersectionPoint: Identifiable, Equatable {
     }
 }
 
+// MARK: - Marked Point Model
+/// 作図モードでユーザーが打った点
+struct MarkedPoint: Identifiable, Equatable {
+    let id: UUID = UUID()
+    let label: String  // "A", "B", "C", ...
+    let x: Double
+    let y: Double
+    
+    /// Convert to CGPoint for drawing
+    var cgPoint: CGPoint {
+        return CGPoint(x: x, y: y)
+    }
+}
+
 // MARK: - Geometry Element Model
 /// Represents user-drawn geometric elements in interactive mode
 enum GeometryElement: Identifiable, Equatable {

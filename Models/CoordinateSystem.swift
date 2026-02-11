@@ -14,21 +14,30 @@ import CoreGraphics
 /// IDD Specification: Center of screen is (0, 0) in math coordinates
 struct CoordinateSystem {
     let size: CGSize
+    let zoomScale: CGFloat
+    let panOffset: CGSize
     
-    // Scale factor: how many screen points per math unit
-    // IDD: Use min(width, height) / 12.0 to show approximately ±6 units
+    // Scale factor with zoom
     var scale: CGFloat {
-        return min(size.width, size.height) / 12.0
+        return (min(size.width, size.height) / 12.0) * zoomScale
     }
     
-    // Origin position in screen coordinates (center of canvas)
     var centerX: CGFloat {
-        return size.width / 2.0
+        return size.width / 2.0 + panOffset.width
     }
     
     var centerY: CGFloat {
-        return size.height / 2.0
+        return size.height / 2.0 + panOffset.height
     }
+    
+    // 初期化時にズームとパンをデフォルト値で受け取る
+    init(size: CGSize, zoomScale: CGFloat = 1.0, panOffset: CGSize = .zero) {
+        self.size = size
+        self.zoomScale = zoomScale
+        self.panOffset = panOffset
+    }
+    
+
     
     // MARK: - Coordinate Conversion
     

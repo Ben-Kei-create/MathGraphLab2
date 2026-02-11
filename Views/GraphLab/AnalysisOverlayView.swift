@@ -21,7 +21,11 @@ struct AnalysisOverlayView: View {
     
     var body: some View {
         Canvas { context, size in
-            let coordSystem = CoordinateSystem(size: size)
+            let coordSystem = CoordinateSystem(
+                size: size,
+                zoomScale: appState.zoomScale,
+                panOffset: appState.panOffset
+            )
             
             // Calculate intersection points using MathSolver
             let intersections = MathSolver.solveIntersections(
