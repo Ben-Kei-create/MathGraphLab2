@@ -10,7 +10,6 @@
 		A5BEBAC32F3C655E009A42F6 /* BannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BEBAC22F3C655E009A42F6 /* BannerAdView.swift */; };
 		A5BEBAC72F3C8AD5009A42F6 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = A5BEBAC62F3C8AD5009A42F6 /* GoogleMobileAds */; };
 		A5BEBAD32F3C95E9009A42F6 /* EquationOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BEBAD22F3C95E4009A42F6 /* EquationOverlayView.swift */; };
-		A5C079812F3BFB54005E1164 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C079652F3BFB54005E1164 /* Assets.xcassets */; };
 		A5C079842F3BFB54005E1164 /* GraphLabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079782F3BFB54005E1164 /* GraphLabView.swift */; };
 		A5C079852F3BFB54005E1164 /* AnalysisOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C079752F3BFB54005E1164 /* AnalysisOverlayView.swift */; };
 		A5C079862F3BFB54005E1164 /* MathGraphLabApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0795F2F3BFB54005E1164 /* MathGraphLabApp.swift */; };
@@ -69,7 +68,6 @@
 		A5C079602F3BFB54005E1164 /* MathSolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathSolverTests.swift; sourceTree = "<group>"; };
 		A5C079622F3BFB54005E1164 /* CoordinateSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSystem.swift; sourceTree = "<group>"; };
 		A5C079632F3BFB54005E1164 /* MathModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathModels.swift; sourceTree = "<group>"; };
-		A5C079652F3BFB54005E1164 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5C079682F3BFB54005E1164 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		A5C0796A2F3BFB54005E1164 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		A5C0796B2F3BFB54005E1164 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
@@ -424,7 +422,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5C079812F3BFB54005E1164 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

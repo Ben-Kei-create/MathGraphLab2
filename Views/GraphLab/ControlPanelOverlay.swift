@@ -110,25 +110,19 @@ struct ControlPanelOverlay: View {
                     isPanelVisible = true
                 }
             }) {
-                HStack(spacing: 8) {
-                    Image(systemName: appState.isGeometryModeEnabled ? "pencil.and.outline" : "slider.horizontal.3")
-                    Text(appState.isGeometryModeEnabled ? "座標入力パネル" : "パラメータ操作")
-                }
-                .font(.system(size: 16, weight: .bold))
-                .foregroundColor(.white)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 14)
-                .background(
-                    Capsule()
-                        .fill(appState.isGeometryModeEnabled ? Color.orange : Color.blue)
-                        .shadow(color: .black.opacity(0.3), radius: 8, y: 4)
-                )
+                Image(systemName: appState.isGeometryModeEnabled ? "pencil.and.outline" : "slider.horizontal.3")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(width: 50, height: 50)
+                    .background(
+                        Circle()
+                            .fill(appState.isGeometryModeEnabled ? Color.orange : Color.blue)
+                            .shadow(color: .black.opacity(0.3), radius: 8, y: 4)
+                    )
             }
             
-            // 修正後（$を取るだけ！）
             if appState.isGeometryModeEnabled {
                 Button(action: {
-                    // 直接 appState を呼び出します
                     appState.clearMarkedPoints()
                     appState.clearGeometry()
                 }){
@@ -142,6 +136,7 @@ struct ControlPanelOverlay: View {
             }
         }
         .padding(.bottom, 20)
+        .padding(.leading, 10)
     }
     
     // MARK: - Theme Toggle Buttons
