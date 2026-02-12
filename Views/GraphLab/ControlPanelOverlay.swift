@@ -33,15 +33,17 @@ struct ControlPanelOverlay: View {
     @State private var inputY: String = ""
     
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            
-            if isPanelVisible {
-                panelContent
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            } else {
-                compactButton
-                    .transition(.scale.combined(with: .opacity))
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                Spacer()
+
+                if isPanelVisible {
+                    panelContent(availableHeight: geometry.size.height)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                } else {
+                    compactButton
+                        .transition(.scale.combined(with: .opacity))
+                }
             }
         }
         .onAppear { syncAllValues() }
@@ -178,8 +180,9 @@ struct ControlPanelOverlay: View {
     }
 
     // MARK: - Panel Content
-    private var panelContent: some View {
-        VStack(spacing: 0) {
+    private func panelContent(availableHeight: CGFloat) -> some View {
+        let scrollHeight = min(300, max(120, availableHeight * 0.45 - 100))
+        return VStack(spacing: 0) {
             HStack {
                 if appState.isGeometryModeEnabled {
                     Text("作図・座標入力").font(.system(size: 14, weight: .bold)).foregroundColor(.secondary)
@@ -245,7 +248,7 @@ struct ControlPanelOverlay: View {
                     functionParameterSection
                 }
             }
-            .frame(height: 300)
+            .frame(height: scrollHeight)
         }
         .background(Material.regular)
         .cornerRadius(20)
