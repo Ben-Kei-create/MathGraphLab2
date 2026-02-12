@@ -94,17 +94,6 @@ struct GraphLabView: View {
                     Toggle(isOn: $appState.isHapticsEnabled) {
                         Label("触覚フィードバック", systemImage: "hand.tap")
                     }
-                    
-                    // テーマ切り替え
-                    Menu {
-                        Picker("テーマ", selection: $appState.appTheme) {
-                            ForEach(AppState.AppTheme.allCases) { theme in
-                                Text(theme.rawValue).tag(theme)
-                            }
-                        }
-                    } label: {
-                        Label("テーマ: \(appState.appTheme.rawValue)", systemImage: "paintpalette")
-                    }
                 }
 
                 // --- 課金・サポート ---

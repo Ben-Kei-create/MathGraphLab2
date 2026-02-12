@@ -146,36 +146,48 @@ struct ControlPanelOverlay: View {
     
     // MARK: - Theme Toggle Buttons
     private var themeToggleButtons: some View {
-        HStack(spacing: 6) {
-            ForEach(AppState.AppTheme.allCases) { theme in
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        appState.appTheme = theme
-                    }
-                    if appState.isHapticsEnabled {
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    }
-                }) {
-                    Circle()
-                        .fill(themeCircleColor(for: theme))
-                        .frame(width: 22, height: 22)
-                        .overlay(
-                            Circle()
-                                .strokeBorder(
-                                    appState.appTheme == theme ? Color.accentColor : Color.gray.opacity(0.3),
-                                    lineWidth: appState.appTheme == theme ? 2.5 : 1
-                                )
-                        )
-                }
+        Button(action: {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                cycleTheme()
             }
+            if appState.isHapticsEnabled {
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            }
+        }) {
+            Image(systemName: themeIconName)
+                .font(.system(size: 18))
+                .foregroundColor(themeIconColor)
+                .frame(width: 32, height: 32)
+                .background(Circle().fill(Color(uiColor: .tertiarySystemBackground)))
         }
     }
 
-    private func themeCircleColor(for theme: AppState.AppTheme) -> Color {
-        switch theme {
-        case .light: return .white
-        case .dark: return Color(white: 0.15)
-        case .blackboard: return Color(red: 0.0, green: 0.25, blue: 0.18)
+    private var themeIconName: String {
+        switch appState.appTheme {
+        case .light: return "sun.max"
+        case .dark: return "moon"
+        case .blackboard: return "square.fill"
+        }
+    }
+
+    private var themeIconColor: Color {
+        switch appState.appTheme {
+        case .light: return .orange
+        case .dark: return .indigo
+        case .blackboard: return Color(red: 0.0, green: 0.6, blue: 0.4)
+        }
+    }
+
+    private func cycleTheme() {
+        let allThemes = AppState.AppTheme.allCases
+        guard let currentIndex = allThemes.firstIndex(of: appState.appTheme) else { return }
+        let nextIndex = (currentIndex + 1) % allThemes.count
+        let nextTheme = allThemes[nextIndex]
+        // Pro未購入の場合、blackboardをスキップ
+        if nextTheme == .blackboard && !appState.isProEnabled {
+            appState.appTheme = allThemes[(nextIndex + 1) % allThemes.count]
+        } else {
+            appState.appTheme = nextTheme
         }
     }
 
