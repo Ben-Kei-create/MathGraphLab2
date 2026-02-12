@@ -23,6 +23,12 @@ final class AppState: ObservableObject {
         case fraction = "分数"
         var id: String { self.rawValue }
     }
+    
+    enum GraphType: String, CaseIterable, Identifiable {
+        case parabola = "放物線"
+        case line = "直線"
+        var id: String { self.rawValue }
+    }
 
     // MARK: - User Settings
     // @AppStorage は ObservableObject 内で objectWillChange を発火しないため、
@@ -71,6 +77,10 @@ final class AppState: ObservableObject {
     @Published var showDistances: Bool = false
     @Published var isLineFromPoints: Bool = false
     @Published var lineCreationError: String? = nil
+    
+    // グラフ拘束移動用の状態
+    @Published var constrainedPointIndex: Int? = nil
+    @Published var constrainedGraphType: GraphType? = nil
     
     private var cancellables = Set<AnyCancellable>()
     private var pointLabelIndex: Int = 0

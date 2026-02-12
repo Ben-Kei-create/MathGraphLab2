@@ -196,13 +196,29 @@ struct ControlPanelOverlay: View {
                     HStack(spacing: 12) {
                         Text("パラメータ設定").font(.system(size: 14, weight: .bold)).foregroundColor(.secondary)
 
-                        Picker("Input Mode", selection: $appState.coefficientInputMode) {
-                            ForEach(AppState.InputMode.allCases) { mode in
-                                Text(mode.rawValue).tag(mode)
+
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                appState.coefficientInputMode = appState.coefficientInputMode == .decimal ? .fraction : .decimal
                             }
+                            if appState.isHapticsEnabled {
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            }
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: appState.coefficientInputMode == .decimal ? "number" : "divide")
+                                Text(appState.coefficientInputMode.rawValue)
+                            }
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(appState.coefficientInputMode == .decimal ? .blue : .purple)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(
+                                Capsule()
+                                    .fill(Color(uiColor: .tertiarySystemBackground))
+                            )
                         }
-                        .pickerStyle(.segmented)
-                        .frame(width: 120)
+
 
                         // テーマ切替ボタン（⚫◯で瞬時に切替）
                         themeToggleButtons
