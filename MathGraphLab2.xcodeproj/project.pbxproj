@@ -168,7 +168,6 @@
 				A5C0795F2F3BFB54005E1164 /* MathGraphLabApp.swift */,
 				A5C079612F3BFB54005E1164 /* MathGraphLabTests */,
 				A5C079642F3BFB54005E1164 /* Models */,
-				A5C079672F3BFB54005E1164 /* Resources */,
 				A5C079692F3BFB54005E1164 /* State */,
 				A5C0796C2F3BFB54005E1164 /* Utilities */,
 				A5C0796F2F3BFB54005E1164 /* ViewModels */,
@@ -226,14 +225,6 @@
 				A5C079632F3BFB54005E1164 /* MathModels.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		A5C079672F3BFB54005E1164 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A5C079652F3BFB54005E1164 /* Assets.xcassets */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		A5C079692F3BFB54005E1164 /* State */ = {
