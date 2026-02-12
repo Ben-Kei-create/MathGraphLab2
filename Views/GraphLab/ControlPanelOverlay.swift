@@ -329,11 +329,19 @@ struct ControlPanelOverlay: View {
             HStack(alignment: .bottom, spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("X").font(.caption).bold().foregroundColor(.secondary)
-                    TextField("0.0", text: $inputX).keyboardType(.decimalPad).textFieldStyle(.roundedBorder).frame(width: 80)
+                    TextField("0.0", text: $inputX)
+                        .keyboardType(.decimalPad).textFieldStyle(.roundedBorder).frame(width: 80)
+                        .onChange(of: inputX) { _, newValue in
+                            if newValue.count > 7 { inputX = String(newValue.prefix(7)) }
+                        }
                 }
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Y").font(.caption).bold().foregroundColor(.secondary)
-                    TextField("0.0", text: $inputY).keyboardType(.decimalPad).textFieldStyle(.roundedBorder).frame(width: 80)
+                    TextField("0.0", text: $inputY)
+                        .keyboardType(.decimalPad).textFieldStyle(.roundedBorder).frame(width: 80)
+                        .onChange(of: inputY) { _, newValue in
+                            if newValue.count > 7 { inputY = String(newValue.prefix(7)) }
+                        }
                 }
                 Button(action: { addPointFromInput() }) {
                     Text("追加").bold().foregroundColor(.white).padding(.horizontal, 16).padding(.vertical, 8).background(Color.orange).cornerRadius(8)
@@ -377,8 +385,14 @@ struct ControlPanelOverlay: View {
     }
     
     private func addPointFromInput() {
-        guard let x = Double(inputX), let y = Double(inputY) else { return }
-        appState.addMarkedPoint(x: x, y: y)
+        let xTrimmed = inputX.trimmingCharacters(in: .whitespaces)
+        let yTrimmed = inputY.trimmingCharacters(in: .whitespaces)
+        guard !xTrimmed.isEmpty, !yTrimmed.isEmpty,
+              let x = Double(xTrimmed), let y = Double(yTrimmed),
+              x.isFinite, y.isFinite else { return }
+        let clampedX = min(max(x, -100), 100)
+        let clampedY = min(max(y, -100), 100)
+        appState.addMarkedPoint(x: clampedX, y: clampedY)
         inputX = ""; inputY = ""
         if appState.isHapticsEnabled { HapticManager.shared.impact(style: .medium) }
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -391,24 +405,59 @@ struct ParameterInput: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label).font(.system(size: 12, weight: .semibold, design: .monospaced)).foregroundColor(color)
-            TextField("0.0", text: $text).keyboardType(.decimalPad).textFieldStyle(.roundedBorder).font(.system(size: 14, design: .monospaced)).multilineTextAlignment(.center).onChange(of: text) { _, _ in commitValue() }
+            TextField("0.0", text: $text)
+                .keyboardType(.decimalPad).textFieldStyle(.roundedBorder)
+                .font(.system(size: 14, design: .monospaced)).multilineTextAlignment(.center)
+                .onChange(of: text) { _, newValue in
+                    if newValue.count > 8 { text = String(newValue.prefix(8)) }
+                    commitValue()
+                }
         }
     }
-    private func commitValue() { if let value = Double(text) { onCommit(min(max(value, range.lowerBound), range.upperBound)) } }
+    private func commitValue() {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        if trimmed.isEmpty || trimmed == "." || trimmed == "-" || trimmed == "-." { return }
+        guard let value = Double(trimmed), value.isFinite else { return }
+        onCommit(min(max(value, range.lowerBound), range.upperBound))
+    }
 }
 struct FractionInput: View {
     let label: String; @Binding var numerator: String; @Binding var denominator: String; let color: Color; let onCommit: (Double) -> Void
+    @State private var showZeroWarning: Bool = false
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label).font(.system(size: 12, weight: .semibold, design: .monospaced)).foregroundColor(color)
             HStack(spacing: 4) {
-                TextField("1", text: $numerator).keyboardType(.numberPad).textFieldStyle(.roundedBorder).font(.system(size: 14, design: .monospaced)).multilineTextAlignment(.center).onChange(of: numerator) { _, _ in commitFraction() }
+                TextField("1", text: $numerator)
+                    .keyboardType(.numberPad).textFieldStyle(.roundedBorder)
+                    .font(.system(size: 14, design: .monospaced)).multilineTextAlignment(.center)
+                    .onChange(of: numerator) { _, newValue in
+                        if newValue.count > 6 { numerator = String(newValue.prefix(6)) }
+                        commitFraction()
+                    }
                 Text("/").font(.system(size: 16, weight: .bold, design: .monospaced)).foregroundColor(color)
-                TextField("1", text: $denominator).keyboardType(.numberPad).textFieldStyle(.roundedBorder).font(.system(size: 14, design: .monospaced)).multilineTextAlignment(.center).onChange(of: denominator) { _, _ in commitFraction() }
+                TextField("1", text: $denominator)
+                    .keyboardType(.numberPad).textFieldStyle(.roundedBorder)
+                    .font(.system(size: 14, design: .monospaced)).multilineTextAlignment(.center)
+                    .overlay(showZeroWarning ? RoundedRectangle(cornerRadius: 6).stroke(Color.red, lineWidth: 2) : nil)
+                    .onChange(of: denominator) { _, newValue in
+                        if newValue.count > 6 { denominator = String(newValue.prefix(6)) }
+                        commitFraction()
+                    }
+            }
+            if showZeroWarning {
+                Text("分母に0は使えません").font(.system(size: 10)).foregroundColor(.red)
             }
         }
     }
-    private func commitFraction() { guard let n = Double(numerator), let d = Double(denominator), d != 0 else { return }; onCommit(n / d) }
+    private func commitFraction() {
+        guard let n = Double(numerator), let d = Double(denominator) else { showZeroWarning = false; return }
+        if d == 0 { showZeroWarning = true; return }
+        showZeroWarning = false
+        let result = n / d
+        guard result.isFinite else { return }
+        onCommit(result)
+    }
 }
 struct ParameterSlider: View {
     let label: String; @Binding var value: Double; let range: ClosedRange<Double>; let color: Color
