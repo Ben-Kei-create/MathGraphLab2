@@ -136,15 +136,6 @@ struct GraphLabView: View {
                     }
                 }
 
-                // --- リセット ---
-                Section {
-                    Button(role: .destructive, action: {
-                        appState.reset()
-                    }) {
-                        Label("グラフを初期状態に戻す", systemImage: "arrow.counterclockwise")
-                    }
-                }
-                
             } label: {
                 Image(systemName: "ellipsis.circle")
                     .font(.system(size: 20))
