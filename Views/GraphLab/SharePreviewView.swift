@@ -261,19 +261,23 @@ struct ExportSheetView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 16) {
+            VStack(spacing: 20) {
                 // プレビュー
                 previewSection
 
                 // 形式選択
                 formatPicker
 
+                Spacer()
+
                 // エクスポートボタン
                 exportButton
             }
-            .padding()
+            .padding(.horizontal, 20)
+            .padding(.top, 8)
+            .padding(.bottom, 16)
             .navigationTitle("グラフをエクスポート")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("閉じる") { dismiss() }
@@ -289,24 +293,21 @@ struct ExportSheetView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            // ライブプレビュー（縮小表示）
             ExportableGraphView(appState: appState, size: exportSize)
-                .frame(height: 240)
+                .frame(maxWidth: .infinity)
+                .aspectRatio(exportSize.width / exportSize.height, contentMode: .fit)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .strokeBorder(Color.secondary.opacity(0.3), lineWidth: 1)
                 )
+                .shadow(color: .black.opacity(0.08), radius: 6, y: 3)
         }
     }
 
     // MARK: - Format Picker
     private var formatPicker: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("出力形式")
-                .font(.caption)
-                .foregroundColor(.secondary)
-
+        VStack(spacing: 10) {
             Picker("形式", selection: $selectedFormat) {
                 ForEach(ExportFormat.allCases) { format in
                     Label(format.rawValue, systemImage: format.icon)
@@ -314,12 +315,15 @@ struct ExportSheetView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .frame(maxWidth: .infinity)
 
             Text(selectedFormat == .png
                  ? "高解像度の画像ファイル。SNSやメッセージでの共有に最適です。"
                  : "ベクター品質の文書ファイル。印刷やプリント教材に最適です。")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
         }
     }
 

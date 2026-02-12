@@ -111,7 +111,7 @@ struct ControlPanelOverlay: View {
                 }
             }) {
                 Image(systemName: appState.isGeometryModeEnabled ? "pencil.and.outline" : "slider.horizontal.3")
-                    .font(.system(size: 20, weight: .bold))
+                    .font(.system(size: 22, weight: .semibold))
                     .foregroundColor(.white)
                     .frame(width: 50, height: 50)
                     .background(
@@ -120,12 +120,12 @@ struct ControlPanelOverlay: View {
                             .shadow(color: .black.opacity(0.3), radius: 8, y: 4)
                     )
             }
-            
+
             if appState.isGeometryModeEnabled {
                 Button(action: {
                     appState.clearMarkedPoints()
                     appState.clearGeometry()
-                }){
+                }) {
                     Image(systemName: "trash")
                         .font(.system(size: 20))
                         .foregroundColor(.white)
@@ -136,7 +136,6 @@ struct ControlPanelOverlay: View {
             }
         }
         .padding(.bottom, 20)
-        .padding(.leading, 10)
     }
     
     // MARK: - Theme Toggle Buttons
