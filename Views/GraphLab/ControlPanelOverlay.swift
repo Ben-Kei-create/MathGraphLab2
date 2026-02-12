@@ -379,6 +379,14 @@ struct ControlPanelOverlay: View {
                     }
                     .bold().foregroundColor(.white).frame(maxWidth: .infinity).padding().background(Color.red).cornerRadius(10)
                 }
+                if let error = appState.lineCreationError {
+                    HStack(spacing: 6) {
+                        Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.orange)
+                        Text(error).font(.system(size: 12)).foregroundColor(.red)
+                    }
+                    .padding(.horizontal, 8).padding(.vertical, 6)
+                    .background(Color.red.opacity(0.1)).cornerRadius(8)
+                }
             }
         }
         .padding()

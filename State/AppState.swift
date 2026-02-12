@@ -70,6 +70,7 @@ final class AppState: ObservableObject {
     @Published var panOffset: CGSize = .zero
     @Published var showDistances: Bool = false
     @Published var isLineFromPoints: Bool = false
+    @Published var lineCreationError: String? = nil
     
     private var cancellables = Set<AnyCancellable>()
     private var pointLabelIndex: Int = 0
@@ -119,6 +120,10 @@ final class AppState: ObservableObject {
     func updateParabolaA(_ value: Double, snap: Bool = false) {
         var newValue = max(-5.0, min(5.0, value))
         if snap { newValue = round(newValue) }
+        // a=0 は二次関数として無効（1/(4a) 等でゼロ除算のリスク）→ 最小絶対値 0.01 に補正
+        if abs(newValue) < 0.01 {
+            newValue = newValue >= 0 ? 0.01 : -0.01
+        }
         parabola.a = newValue
     }
     
@@ -175,9 +180,19 @@ final class AppState: ObservableObject {
     }
     
     func createLineFromPoints() {
+        lineCreationError = nil
         guard markedPoints.count >= 2 else { return }
         let p1 = markedPoints[0], p2 = markedPoints[1]
-        if p1.x == p2.x { return }
+        // 同一点チェック（不定形 0/0 の防止）
+        if abs(p1.x - p2.x) < 1e-10 && abs(p1.y - p2.y) < 1e-10 {
+            lineCreationError = "同じ点が2つ選ばれています。異なる2点を指定してください。"
+            return
+        }
+        // 垂直線チェック（傾き無限大の防止）
+        if abs(p1.x - p2.x) < 1e-10 {
+            lineCreationError = "x座標が同じ2点では垂直線（x = \(String(format: "%.1f", p1.x))）になり、y = mx + n の形で表せません。"
+            return
+        }
         let m = (p2.y - p1.y) / (p2.x - p1.x)
         let n = p1.y - m * p1.x
         updateLineM(m)
